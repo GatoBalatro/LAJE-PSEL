@@ -1,122 +1,60 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { useContext } from 'react';
+import { GameContext } from './components/context/GameContext';
+import { GameProvider } from './components/context/GameProvider';
+import MinigameWindow from './components/MinigameWindow';
 
-function App() {
-  const [count, setCount] = useState(0)
+// Exemplo do JSON carregado
+const mockNpcData = {
+  id: "alvo_01",
+  minigameConfig: {
+    timeLimit: 45,
+    totalFiles: 40,
+    targetFile: {
+      name: "projeto_secreto_energia",
+      extension: ".jpg"
+    }
+  }
+};
+
+function GameController() {
+  const { gameState, startMinigame } = useContext(GameContext);
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
+    <div className="min-h-screen flex items-center justify-center p-4">
+      {gameState === 'idle' && (
+        <button 
+          onClick={() => startMinigame(mockNpcData)}
+          className="bg-[#c0c0c0] border-2 border-t-white border-l-white border-b-gray-800 border-r-gray-800 px-4 py-2 font-bold active:border-t-gray-800 active:border-l-gray-800 active:border-b-white active:border-r-white"
         >
-          Count is {count}
+          Iniciar Minigame (Debug)
         </button>
-      </section>
+      )}
 
-      <div className="ticks"></div>
+      {gameState === 'playing' && <MinigameWindow />}
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
+      {gameState === 'won' && (
+        <div className="bg-[#c0c0c0] p-6 border-2 border-t-white border-l-white border-b-gray-800 border-r-gray-800 text-center">
+          <h2 className="text-blue-800 font-bold text-xl mb-4">Sucesso!</h2>
+          <p>Arquivo localizado a tempo.</p>
+          <button onClick={() => window.location.reload()} className="mt-4 px-4 py-1 border-2 border-gray-800 bg-gray-300">Reiniciar</button>
         </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+      )}
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+      {gameState === 'lost' && (
+        <div className="bg-[#c0c0c0] p-6 border-2 border-t-white border-l-white border-b-gray-800 border-r-gray-800 text-center">
+          <h2 className="text-red-800 font-bold text-xl mb-4">Falha de Sistema</h2>
+          <p>Tempo esgotado.</p>
+          <button onClick={() => window.location.reload()} className="mt-4 px-4 py-1 border-2 border-gray-800 bg-gray-300">Reiniciar</button>
+        </div>
+      )}
+    </div>
+  );
 }
 
-export default App
+export default function App() {
+  return (
+    <GameProvider>
+      <GameController />
+    </GameProvider>
+  );
+}

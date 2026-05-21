@@ -1,0 +1,33 @@
+{
+  "id": "alvo_01",
+  "name": "Diretor de Infraestrutura",
+  "avatar": "[AVATAR]",
+  "phase": 1,
+  "minigameConfig": {
+    "timeLimit": 45,
+    "totalFiles": 40, 
+    "targetFile": {
+      "name": "projeto_secreto_energia",
+      "extension": ".jpg"
+    }
+  },
+  "dialogs": {
+    "root": {
+      "text": "O que você quer? Estou ocupado gerenciando a rede da cidade.",
+      "options": [
+        {
+          "text": "[Chantagear] Use o arquivo que você encontrou",
+          "nextNode": "sucesso_chantagem",
+          "requiresMinigameSuccess": true
+        },
+        {
+          "text": "Tentar persuadir sem provas",
+          "nextNode": "falha_bloqueio",
+          "requiresMinigameSuccess": false
+        }
+      ]
+    },
+    "sucesso_chantagem": { "text": "Ok, você venceu...", "isWinEnd": true, "isTerminal": true },
+    "falha_bloqueio": { "text": "Suma daqui.", "isWinEnd": false, "isTerminal": true }
+  }
+}
