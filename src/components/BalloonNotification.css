@@ -1,0 +1,68 @@
+.balloon-tip {
+  position: absolute;
+  bottom: 50px;
+  right: 10px;
+  width: 240px;
+  background: white;
+  border: 1px solid #707070;
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  z-index: 10001;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  animation: balloon-slide-up 0.3s ease-out;
+}
+
+@keyframes balloon-slide-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.balloon-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  margin-bottom: 6px;
+  color: #003399; /* Cor azul clássica dos títulos do Win7 */
+}
+
+.balloon-close {
+  background: none;
+  border: none;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  color: #666;
+  padding: 0;
+  margin-top: -4px;
+}
+
+.balloon-body {
+  font-size: 12px;
+  color: #333;
+  line-height: 1.4;
+}
+
+.balloon-stem {
+  position: absolute;
+  bottom: -10px;
+  right: 25px;
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 10px solid #707070;
+}
+
+.balloon-stem::after {
+  content: '';
+  position: absolute;
+  top: -11px;
+  left: -10px;
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 10px solid white;
+}
