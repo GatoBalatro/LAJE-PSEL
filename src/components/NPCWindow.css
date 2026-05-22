@@ -1,0 +1,195 @@
+.aero-window {
+  position: absolute;
+  display: flex !important; /* Garante que não está como none */
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(200, 225, 255, 0.2) 100%);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 8px 8px 0 0;
+  box-shadow: 
+    0 10px 30px rgba(0, 0, 0, 0.3),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+  display: flex;
+  flex-direction: column;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  min-width: 450px;
+  user-select: none;
+
+  /* Efeito de brilho de vidro */
+  background-image: linear-gradient(
+    110deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.1) 45%,
+    rgba(255, 255, 255, 0.4) 50%,
+    rgba(255, 255, 255, 0.1) 55%,
+    rgba(255, 255, 255, 0.1) 100%
+  );
+  background-size: 200% 100%;
+  background-position: 100% 0;
+
+  /* Configuração da Animação */
+  /* aero-fade-in: animação de entrada ao montar o componente */
+  /* aero-shine-auto: o brilho contínuo que já tínhamos */
+  animation: 
+    aero-fade-in 0.4s cubic-bezier(0.1, 0.9, 0.2, 1), 
+    aero-shine-auto 8s infinite linear;
+  
+  transition: 
+    transform 0.3s cubic-bezier(0.1, 0.9, 0.2, 1), 
+    opacity 0.25s ease-out,
+    visibility 0.3s;
+  transform-origin: bottom center; /* Faz a janela encolher em direção à barra de tarefas */
+}
+
+.aero-window:hover {
+  background-position: 0 0;
+}
+
+@keyframes aero-shine-auto {
+  0% { background-position: 200% 0; }
+  20% { background-position: -100% 0; } /* O brilho passa rápido */
+  100% { background-position: -100% 0; } /* Pausa longa até o próximo brilho */
+}
+
+@keyframes aero-fade-in {
+  0% { 
+    opacity: 0; 
+    transform: scale(0.92) translateY(-15px); 
+  }
+  100% { 
+    opacity: 1; 
+    transform: scale(1) translateY(0); 
+  }
+}
+
+@keyframes skype-nudge {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-10px, -10px); }
+  20% { transform: translate(10px, 10px); }
+  30% { transform: translate(-10px, 10px); }
+  40% { transform: translate(10px, -10px); }
+  50% { transform: translate(-10px, -10px); }
+  60% { transform: translate(10px, 10px); }
+  70% { transform: translate(-10px, 10px); }
+  80% { transform: translate(10px, -10px); }
+}
+
+.aero-window.nudge {
+  animation: skype-nudge 0.4s linear !important;
+}
+
+.aero-window.minimized {
+  transform: scale(0.7) translateY(100px);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.title-bar {
+  padding: 10px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: move;
+  /* Azul Skype Clássico */
+  background: linear-gradient(to bottom, #00aff0 0%, #008cc9 100%);
+}
+
+.title {
+  color: white;
+  font-size: 13px;
+  font-weight: 500;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.controls button {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  color: #333;
+  margin-left: 5px;
+  padding: 2px 10px;
+  border-radius: 3px;
+  transition: all 0.2s;
+}
+
+.controls .close:hover {
+  background: #e81123;
+  color: white;
+  border-color: #b2101e;
+}
+
+.window-body {
+  background: #ffffff;
+  margin: 0 5px 5px 5px;
+  padding: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 0 0 4px 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.npc-info {
+  display: flex;
+  gap: 15px;
+  align-items: flex-start;
+}
+
+.avatar-glass {
+  width: 80px;
+  height: 80px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  padding: 2px;
+  background: white;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.dialog-bubble {
+  font-size: 14px;
+  color: #444;
+  line-height: 1.4;
+  background: #e5f7fd;
+  padding: 10px;
+  border-radius: 10px 10px 10px 2px;
+  border: 1px solid #c2e6f4;
+}
+
+.options-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.win7-button {
+  background: linear-gradient(to bottom, #f2f2f2 0%, #ebebeb 50%, #dddddd 51%, #cfcfcf 100%);
+  border: 1px solid #707070;
+  border-radius: 3px;
+  padding: 6px 15px;
+  color: #222;
+  font-size: 13px;
+  cursor: pointer;
+  box-shadow: inset 0 1px 0 white;
+  text-align: left;
+}
+
+.win7-button:hover {
+  background: linear-gradient(to bottom, #eaf6fd 0%, #d9f0fc 50%, #bee6fd 51%, #a7d9f5 100%);
+  border-color: #3c7fb1;
+  box-shadow: inset 0 0 0 1px #fff, 0 0 5px rgba(60, 127, 177, 0.4);
+}
+
+.status-bar {
+  background: #f0f0f0;
+  padding: 3px 10px;
+  font-size: 11px;
+  color: #666;
+  border-top: 1px solid #ccc;
+  border-radius: 0 0 8px 8px;
+}
+
+.skype-status {
+  color: #7eba00; /* Verde Skype */
+  font-weight: bold;
+  font-size: 10px;
+}

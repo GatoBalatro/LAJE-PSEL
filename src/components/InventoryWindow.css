@@ -1,0 +1,49 @@
+/* Importamos a base Aero para manter a consistência */
+@import './NPCWindow.css';
+
+.inventory-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: 15px;
+  padding: 15px !important;
+  background: white;
+  min-height: 200px;
+}
+
+.inventory-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
+  padding: 5px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+}
+
+.inventory-item:hover {
+  background: rgba(180, 220, 255, 0.3);
+  border-color: rgba(100, 180, 255, 0.5);
+}
+
+.file-icon-aero {
+  width: 48px;
+  height: 48px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  margin-bottom: 5px;
+}
+
+.icon-image { background-image: url('/icons/image_file.png'); }
+.icon-text { background-image: url('/icons/text_file.png'); }
+.icon-generic { background-image: url('/icons/generic_file.png'); }
+
+.file-name {
+  font-size: 11px;
+  color: #333;
+  word-break: break-all;
+  text-shadow: 0 0 5px white;
+}
+
+.empty-message { color: #666; font-style: italic; font-size: 13px; }

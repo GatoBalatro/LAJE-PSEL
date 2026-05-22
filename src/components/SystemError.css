@@ -1,0 +1,60 @@
+.system-error-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.05);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 20000;
+}
+
+@keyframes aero-shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-6px); }
+  20%, 40%, 60%, 80% { transform: translateX(6px); }
+}
+
+.system-dialog {
+  min-width: 350px !important;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.5) !important;
+  animation: aero-shake 0.4s ease-in-out;
+}
+
+.error-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 25px !important;
+  text-align: center;
+}
+
+.error-icon-container {
+  margin-bottom: 15px;
+}
+
+.win7-error-icon {
+  width: 32px;
+  height: 32px;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 20px;
+  border: 2px solid white;
+  box-shadow: 0 0 5px rgba(0,0,0,0.3);
+}
+
+.severity-error { background: #e81123; }
+.severity-warning { background: #ffcc00; color: black; }
+.severity-info { background: #0078d7; }
+
+.ok-button {
+  align-self: flex-end;
+  margin-top: 15px;
+  min-width: 80px;
+}

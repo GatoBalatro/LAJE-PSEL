@@ -1,7 +1,7 @@
 {
   "id": "alvo_01",
   "name": "Diretor de Infraestrutura",
-  "avatar": "[AVATAR]",
+  "avatar": "/icons/director_normal.png",
   "phase": 1,
   "minigameConfig": {
     "timeLimit": 45,
@@ -18,7 +18,8 @@
         {
           "text": "[Chantagear] Use o arquivo que você encontrou",
           "nextNode": "sucesso_chantagem",
-          "requiresMinigameSuccess": true
+          "requiresMinigameSuccess": true,
+          "requiredEvidenceId": "projeto_secreto_energia.jpg"
         },
         {
           "text": "Tentar persuadir sem provas",
@@ -28,6 +29,11 @@
       ]
     },
     "sucesso_chantagem": { "text": "Ok, você venceu...", "isWinEnd": true, "isTerminal": true },
-    "falha_bloqueio": { "text": "Suma daqui.", "isWinEnd": false, "isTerminal": true }
+    "falha_bloqueio": { 
+      "text": "Suma daqui.", 
+      "avatar": "/icons/director_angry.png",
+      "isWinEnd": false, 
+      "isTerminal": true 
+    }
   }
 }
