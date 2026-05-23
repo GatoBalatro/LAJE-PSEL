@@ -7,16 +7,11 @@ export const renataFiles = {
             type: 'folder', children: {
               'emails_internos_2019.eml': {
                 type: 'file', kind: 'secret',
-                preview: `<span class="preview-tag tag-secret">GATILHO FINAL 3</span><br><br>
-Thread entre Sec. Obras (João Faria) e Dir. da consultora (Paulo Melo).<br><br>
-"Paulo, sabemos que o projeto Sousa é tecnicamente superior. Mas o contrato já está comprometido com a Construtora Delta. Recomendamos encerrar o vínculo da engenheira para evitar ruído."<br><br>
-"Entendido, João. Faremos a demissão na próxima semana com justa causa fabricada."<br><br>
-<i>Prova direta de corrupção. Se Renata suspeitar do hacker e investigar, ela encontra isso e descobre que o contratante tem ligação com a Construtora Delta — o mesmo esquema.</i>`
+                preview: `<span class="preview-tag tag-secret">GATILHO FINAL 3</span><br><br>Thread entre Sec. Obras (João Faria) e Dir. da consultora (Paulo Melo).<br><br>"Paulo, sabemos que o projeto Sousa é tecnicamente superior. Mas o contrato já está comprometido com a Construtora Delta. Recomendamos encerrar o vínculo da engenheira para evitar ruído."<br><br>"Entendido, João. Faremos a demissão na próxima semana com justa causa fabricada."`
               },
               'emails_tecnicos_fornecedores.eml': {
                 type: 'file', kind: 'useless',
-                preview: `<span class="preview-tag tag-useless">IRRELEVANTE</span><br><br>
-Trocas sobre especificações de tubulação e prazos de entrega. Técnico, sem nada comprometedor.`
+                preview: `<span class="preview-tag tag-useless">IRRELEVANTE</span><br><br>Trocas sobre especificações de tubulação.`
               }
             }
           },
@@ -24,21 +19,15 @@ Trocas sobre especificações de tubulação e prazos de entrega. Técnico, sem 
             type: 'folder', children: {
               'projeto_drenagem_v7_FINAL.dwg': {
                 type: 'file', kind: 'useful',
-                preview: `<span class="preview-tag tag-useful">ÚTIL</span><br><br>
-Arquivo do projeto completo. Detalhes técnicos da rede de drenagem.<br>
-Contém a análise de risco — sem o projeto, os bairros periféricos ficam vulneráveis a enchentes todo verão.<br><br>
-<i>Pode ser usado no chat para mostrar que o hacker entende do projeto dela, aumentando credibilidade.</i>`
+                preview: `<span class="preview-tag tag-useful">ÚTIL</span><br><br>Arquivo do projeto completo. Detalhes técnicos da rede de drenagem.`
               },
               'projeto_drenagem_v4.dwg': {
                 type: 'file', kind: 'trap',
-                preview: `<span class="preview-tag tag-trap">DISTRAÇÃO</span><br><br>
-Versão antiga com diferenças significativas. Se o hacker citar dados desta versão no chat, Renata vai perceber que está com informações desatualizadas e a suspeita sobe.`
+                preview: `<span class="preview-tag tag-trap">DISTRAÇÃO</span>`
               },
               'projeto_drenagem_v7_FINAL_revisado_paulo.dwg': {
                 type: 'file', kind: 'trap',
-                preview: `<span class="preview-tag tag-trap">DISTRAÇÃO</span><br><br>
-Arquivo com o nome do diretor que a demitiu. Versão levemente alterada com o projeto dela modificado para parecer inviável.<br>
-<i>Armadilha: é a versão falsificada que Paulo usou para justificar a rejeição.</i>`
+                preview: `<span class="preview-tag tag-trap">DISTRAÇÃO</span>`
               }
             }
           },
@@ -46,14 +35,11 @@ Arquivo com o nome do diretor que a demitiu. Versão levemente alterada com o pr
             type: 'folder', children: {
               'laudo_impacto_ambiental.pdf': {
                 type: 'file', kind: 'useless',
-                preview: `<span class="preview-tag tag-useless">IRRELEVANTE</span><br><br>
-Laudo técnico ambiental. 94 páginas. Aprovado pela CETESB. Não tem relação com a demissão.`
+                preview: `<span class="preview-tag tag-useless">IRRELEVANTE</span>`
               },
               'ata_reuniao_prefeitura_mar19.docx': {
                 type: 'file', kind: 'useful',
-                preview: `<span class="preview-tag tag-useful">ÚTIL</span><br><br>
-Ata oficial da reunião de rejeição do projeto. Justificativa oficial: "inadequação orçamentária".<br><br>
-<i>Contradiz os e-mails internos. Mostra que a justificativa foi fabricada. Pode ser usado no chat para mostrar a hipocrisia do processo.</i>`
+                preview: `<span class="preview-tag tag-useful">ÚTIL</span><br><br>Ata oficial da reunião de rejeição do projeto.`
               }
             }
           }
@@ -63,71 +49,27 @@ Ata oficial da reunião de rejeição do projeto. Justificativa oficial: "inadeq
   },
   '/Documentos': {
     type: 'folder', children: {
-      'curriculo_atualizado.pdf': {
-        type: 'file', kind: 'useless',
-        preview: `<span class="preview-tag tag-useless">IRRELEVANTE</span><br><br>
-Currículo. UFPE, especialização, 8 anos de experiência. Ela está mandando para construtoras privadas.`
-      },
+      'curriculo_atualizado.pdf': { type: 'file', kind: 'useless', preview: `...` },
       'contratos_freelance': {
         type: 'folder', children: {
-          'laudo_edificio_central.pdf': {
-            type: 'file', kind: 'useless',
-            preview: `<span class="preview-tag tag-useless">IRRELEVANTE</span><br><br>
-Laudo técnico de edificação para cliente particular. Trabalho corriqueiro de autônoma.`
-          },
-          'laudo_ponte_marginal.pdf': {
-            type: 'file', kind: 'useless',
-            preview: `<span class="preview-tag tag-useless">IRRELEVANTE</span><br><br>
-Laudo estrutural de ponte. Aprovado. Nenhuma relação com o caso.`
-          }
+          'laudo_edificio_central.pdf': { type: 'file', kind: 'useless', preview: `...` },
+          'laudo_ponte_marginal.pdf': { type: 'file', kind: 'useless', preview: `...` }
         }
       },
-      'anotacoes_pessoais.txt': {
-        type: 'file', kind: 'secret',
-        preview: `<span class="preview-tag tag-secret">GATILHO FINAL 3</span><br><br>
-Arquivo de texto simples. Notas esparsas ao longo de meses:<br><br>
-"17/03 — Paulo não atende mais. Ninguém atende.<br>
-22/04 — Vi o contrato da Delta sendo assinado no jornal. R$ 48M. O mesmo projeto. Meu projeto.<br>
-09/06 — Preciso parar de pensar nisso. Não posso provar nada.<br>
-14/09 — Delta Engenharia. Construtora Delta. Sempre Delta. Quem é o dono disso?"<br><br>
-<i>Renata já está investigando a Construtora Delta. Se o hacker mencionar o contratante sem cuidado, ela vai ligar os pontos.</i>`
-      }
+      'anotacoes_pessoais.txt': { type: 'file', kind: 'secret', preview: `...` }
     }
   },
   '/Downloads': {
     type: 'folder', children: {
-      'ABNT_NBR_10844.pdf': {
-        type: 'file', kind: 'useless',
-        preview: `<span class="preview-tag tag-useless">IRRELEVANTE</span><br><br>
-Norma técnica de instalações prediais de águas pluviais. Material de referência profissional.`
-      },
-      'artigo_corrupcao_obras_publicas.pdf': {
-        type: 'file', kind: 'useful',
-        preview: `<span class="preview-tag tag-useful">ÚTIL</span><br><br>
-Artigo acadêmico sobre superfaturamento em obras públicas no Brasil. Renata destacou vários trechos.<br><br>
-<i>Revela que ela já tem um arcabouço ideológico formado sobre corrupção sistêmica. Útil para a abordagem de persuasão ideológica.</i>`
-      },
-      'pesquisa_construtora_delta.html': {
-        type: 'file', kind: 'secret',
-        preview: `<span class="preview-tag tag-secret">GATILHO FINAL 3</span><br><br>
-Página salva do Google. Busca: "Construtora Delta Engenharia sócios"<br><br>
-Resultados salvos incluem registro na Junta Comercial: sócios incluem "M.R. Participações Ltda" — empresa de fachada.<br><br>
-<i>Renata está a um passo de descobrir a identidade do contratante. Se o hacker cometer erros no chat, ela completa essa pesquisa.</i>`
-      }
+      'ABNT_NBR_10844.pdf': { type: 'file', kind: 'useless', preview: `...` },
+      'artigo_corrupcao_obras_publicas.pdf': { type: 'file', kind: 'useful', preview: `...` },
+      'pesquisa_construtora_delta.html': { type: 'file', kind: 'secret', preview: `...` }
     }
   },
   '/Área de Trabalho': {
     type: 'folder', children: {
-      'TO-DO.txt': {
-        type: 'file', kind: 'useless',
-        preview: `<span class="preview-tag tag-useless">IRRELEVANTE</span><br><br>
-Lista: "Ligar pro CREA, enviar laudo da ponte, pagar conta de luz, não ficar pensando no projeto."`
-      },
-      'referencias_tecnologia_drenagem.pdf': {
-        type: 'file', kind: 'useless',
-        preview: `<span class="preview-tag tag-useless">IRRELEVANTE</span><br><br>
-Artigos sobre técnicas modernas de drenagem urbana. Material de atualização profissional.`
-      }
+      'TO-DO.txt': { type: 'file', kind: 'useless', preview: `...` },
+      'referencias_tecnologia_drenagem.pdf': { type: 'file', kind: 'useless', preview: `...` }
     }
   }
 };
@@ -137,8 +79,8 @@ export const renataPhases = [
     label: 'FASE 1 — PRIMEIRO CONTATO',
     renata: ['[SYSTEM]: ALERTA DE ACESSO REMOTO NÃO AUTORIZADO', 'Quem acessou meu computador?', 'Tem 30 segundos pra explicar antes de eu chamar a polícia.'],
     choices: [
-      { text: 'root@nexus:~# inject --msg "Eu li seus arquivos..."', da: 15, ds: 5, next: 1, eff: 'expose' },
-      { text: 'root@nexus:~# send --target "Delta_Info"', da: 5, ds: 20, next: 1, eff: 'delta' },
+      { text: 'root@nexus:~# inject --msg "Eu li seus arquivos..."', da: 5, ds: 5, next: 1, eff: 'expose' }, // Sem arquivo (afinidade reduzida)
+      { text: 'root@nexus:~# send --target "Delta_Info"', da: 2, ds: 20, next: 1, eff: 'delta' }, // Sem arquivo
       { text: 'root@nexus:~# run exploit.sh --vague', da: 0, ds: 10, next: 1, eff: 'vague' },
     ]
   },
@@ -150,9 +92,10 @@ export const renataPhases = [
       vague: 'Que cidade? Isso é vago demais. Fala de forma clara ou vou encerrar esse chat.'
     },
     choices: [
-      { text: '> "Tenho os e-mails entre João Faria e Paulo Melo. Agosto de 2019. Quer ler?"', da: 25, ds: 10, next: 2, eff: 'emails' },
-      { text: '> "Trabalho para pessoas que vão destruir o que a corrupção construiu aqui."', da: 10, ds: 30, next: 2, eff: 'reveal' },
-      { text: '> "A cidade vai pagar por ter rejeitado o projeto mais importante da década."', da: 15, ds: 15, next: 2, eff: 'ideology' },
+      // Bloqueado até encontrar o arquivo 'emails_internos_2019.eml'
+      { text: '> "Tenho os e-mails entre João Faria e Paulo Melo. Agosto de 2019. Quer ler?"', da: 30, ds: 10, next: 2, eff: 'emails', requiredFile: 'emails_internos_2019.eml' }, 
+      { text: '> "Trabalho para pessoas que vão destruir o que a corrupção construiu aqui."', da: 5, ds: 30, next: 2, eff: 'reveal' },
+      { text: '> "A cidade vai pagar por ter rejeitado o projeto mais importante da década."', da: 8, ds: 15, next: 2, eff: 'ideology' },
     ]
   },
   {
@@ -163,8 +106,8 @@ export const renataPhases = [
       ideology: 'Pagar como? Seja direto. Engenheira não trabalha com metáfora.'
     },
     choices: [
-      { text: '> "Preciso que você forneça as plantas técnicas da rede de distribuição. Para identificar os pontos críticos."', da: 10, ds: 25, next: 3, eff: 'ask_plants' },
-      { text: '> "Preciso que você confirme a localização das válvulas de pressão do sistema sul. Tecnicamente."', da: 15, ds: 20, next: 3, eff: 'ask_tech' },
+      { text: '> "Preciso que você forneça as plantas técnicas da rede de distribuição. Para identificar os pontos críticos."', da: 5, ds: 25, next: 3, eff: 'ask_plants' },
+      { text: '> "Preciso que você confirme a localização das válvulas de pressão do sistema sul. Tecnicamente."', da: 10, ds: 20, next: 3, eff: 'ask_tech' },
       { text: '> "A cidade vai sofrer um colapso de infraestrutura. Quero que você saiba que não foi acidente."', da: -10, ds: 40, next: 3, eff: 'honest' },
     ]
   },
@@ -177,7 +120,8 @@ export const renataPhases = [
     },
     choices: [
       { text: '> "A cidade destruiu seu trabalho. Isso é justo."', da: -15, ds: 35, next: 4, eff: 'justify', danger: true },
-      { text: '> "Você não deve nada a uma cidade que te traiu."', da: 5, ds: 20, next: 4, eff: 'betray' },
+      // Bloqueado até encontrar 'ata_reuniao_prefeitura_mar19.docx'
+      { text: '> "Você não deve nada a uma reunião que falsificou sua rejeição por inadequação orçamentária."', da: 25, ds: 10, next: 4, eff: 'betray', requiredFile: 'ata_reuniao_prefeitura_mar19.docx' }, 
       { text: '> "Quem financia? Alguém que perdeu tanto quanto você com esse sistema."', da: 0, ds: 40, next: 4, eff: 'lie', secret: true },
     ]
   },

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { renataFiles, renataPhases } from './renataMission';
 import './RenataWindow.css';
 
@@ -43,14 +43,16 @@ const RenataWindow = ({ zIndex, onFocus, onClose, onMinimize, isMinimized }) => 
   const keyAudioRef = useRef(new Audio('/sounds/key_press.mp3'));
   const hasInitialized = useRef(false);
   const [missionComplete, setMissionComplete] = useState(false);
+  const [missionStatus, setMissionStatus] = useState('active'); // 'active' | 'success' | 'failed'
 
-  // Estados para digitação "Emily is Away"
+  // Novo estado para rastrear arquivos descobertos pelo jogador
+  const [discoveredFiles, setDiscoveredFiles] = useState([]);
+
   const [isPlayerTyping, setIsPlayerTyping] = useState(false);
   const [playerTargetText, setPlayerTargetText] = useState("");
   const [playerCurrentText, setPlayerCurrentText] = useState("");
   const [pendingChoice, setPendingChoice] = useState(null);
   
-  // Estado de posição para o arrasto (Consistência Aero)
   const [position, setPosition] = useState({ x: 120, y: 80 });
   const [isDragging, setIsDragging] = useState(false);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
@@ -61,16 +63,12 @@ const RenataWindow = ({ zIndex, onFocus, onClose, onMinimize, isMinimized }) => 
   useEffect(() => {
     const handleMouseMove = (e) => {
       if (!isDragging || !windowRef.current) return;
-      
       let nextX = e.clientX - offset.x;
       let nextY = e.clientY - offset.y;
       const rect = windowRef.current.getBoundingClientRect();
       const TASKBAR_HEIGHT = 45;
-
-      // Movimentação fluida com limites
       nextX = Math.max(0, Math.min(nextX, window.innerWidth - rect.width));
       nextY = Math.max(0, Math.min(nextY, window.innerHeight - rect.height - TASKBAR_HEIGHT));
-
       setPosition({ x: nextX, y: nextY });
     };
     const handleMouseUp = () => setIsDragging(false);
@@ -85,7 +83,6 @@ const RenataWindow = ({ zIndex, onFocus, onClose, onMinimize, isMinimized }) => 
     };
   }, [isDragging, offset]);
 
-  // Timer para fechar a janela automaticamente após o fim da conversa
   useEffect(() => {
     if (missionComplete && onClose) {
       const timer = setTimeout(() => {
@@ -105,14 +102,9 @@ const RenataWindow = ({ zIndex, onFocus, onClose, onMinimize, isMinimized }) => 
   useEffect(() => {
     if (hasInitialized.current) return;
     hasInitialized.current = true;
-
     typingAudioRef.current = new Audio('/sounds/typing.mp3');
     typingAudioRef.current.loop = true;
-
-    // Start first phase
-    const startPhase = renataPhases[0];
-    sendRenataMessages(startPhase.renata);
-
+    sendRenataMessages(renataPhases[0].renata);
     return () => {
       if (typingAudioRef.current) {
         typingAudioRef.current.pause();
@@ -121,27 +113,21 @@ const RenataWindow = ({ zIndex, onFocus, onClose, onMinimize, isMinimized }) => 
     };
   }, []);
 
-  // Listener para digitação do jogador
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (!isPlayerTyping) return;
-      
-      // Qualquer tecla (exceto teclas de sistema) avança a digitação
       if (e.key.length === 1 || e.key === 'Backspace' || e.key === ' ') {
         if (playerCurrentText.length < playerTargetText.length) {
           const nextChar = playerTargetText[playerCurrentText.length];
           setPlayerCurrentText(prev => prev + nextChar);
-
           keyAudioRef.current.currentTime = 0;
-          keyAudioRef.current.volume = 0.25 + Math.random() * 0.3; // Volume variável entre 0.25 e 0.55
+          keyAudioRef.current.volume = 0.25 + Math.random() * 0.3;
           keyAudioRef.current.play().catch(() => {});
         } else if (playerCurrentText.length === playerTargetText.length) {
-          // Terminou de digitar
           finishPlayerTyping();
         }
       }
     };
-
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isPlayerTyping, playerCurrentText, playerTargetText]);
@@ -164,8 +150,7 @@ const RenataWindow = ({ zIndex, onFocus, onClose, onMinimize, isMinimized }) => 
 
   const finishPlayerTyping = async () => {
     setIsPlayerTyping(false);
-    const finalMsg = playerTargetText;
-    setMessages(prev => [...prev, { who: 'hacker', text: finalMsg }]);
+    setMessages(prev => [...prev, { who: 'hacker', text: playerTargetText }]);
     setPlayerCurrentText("");
     setPlayerTargetText("");
     const choiceToProcess = pendingChoice;
@@ -173,7 +158,6 @@ const RenataWindow = ({ zIndex, onFocus, onClose, onMinimize, isMinimized }) => 
     await processChoice(choiceToProcess);
   };
 
-  
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isTyping]);
@@ -181,38 +165,28 @@ const RenataWindow = ({ zIndex, onFocus, onClose, onMinimize, isMinimized }) => 
   const sendRenataMessages = async (texts) => {
     setIsTyping(true);
     for (const text of texts) {
-      // Efeito Typewriter para o NPC (Renata)
       let displayed = "";
-      // Adicionamos um objeto de mensagem vazio que será preenchido caractere por caractere
       setMessages(prev => [...prev, { who: 'renata', text: "", isTyping: true }]);
-      
       for (let i = 0; i < text.length; i++) {
         displayed += text[i];
-
         setMessages(prev => {
           const updated = [...prev];
-          // Atualizamos o texto da última mensagem adicionada ao array
           updated[updated.length - 1].text = displayed;
           return updated;
         });
-        await new Promise(r => setTimeout(r, 65)); // Renata: Digitação mais lenta e deliberada
+        await new Promise(r => setTimeout(r, 65));
       }
-
       await new Promise(r => setTimeout(r, 300));
     }
-    await new Promise(r => setTimeout(r, 800)); // Delay extra antes de mostrar as escolhas
+    await new Promise(r => setTimeout(r, 800));
     setIsTyping(false);
   };
 
   const handleChoice = async (choice) => {
     let hackerText = choice.text;
-    if (hackerText.startsWith('root@nexus')) {
-      // Mantém comandos root@nexus como estão
-    } else if (hackerText.startsWith('> "')) {
-      hackerText = hackerText.substring(2); // Remove '> "'
-    }
-    if (hackerText.endsWith('"')) {
-      hackerText = hackerText.slice(0, -1); // Remove trailing '"'
+    if (!hackerText.startsWith('root@nexus')) {
+      if (hackerText.startsWith('> "')) hackerText = hackerText.substring(2);
+      if (hackerText.endsWith('"')) hackerText = hackerText.slice(0, -1);
     }
     setPlayerTargetText(hackerText);
     setPendingChoice(choice);
@@ -221,10 +195,20 @@ const RenataWindow = ({ zIndex, onFocus, onClose, onMinimize, isMinimized }) => 
   };
 
   const handleEndGame = async () => {
-    const endText = pathToF3 
-      ? "...Vou descobrir quem você é. E quem está por trás disso."
-      : "Não vou ajudar. E vou reportar essa invasão.";
-    await sendRenataMessages([endText]);
+    // Validação da regra de negócio de afinidade mínima (65%)
+    if (affinity < 65) {
+      setMissionStatus('failed');
+      await sendRenataMessages([
+        "[SISTEMA]: CONEXÃO ENVIADA PARA DISPOSITIVO DE SEGURANÇA.", 
+        "[CONEXÃO CORROMPIDA]: Afinidade final insuficiente (" + affinity + "%). O alvo cortou a comunicação."
+      ]);
+    } else {
+      setMissionStatus('success');
+      const endText = pathToF3 
+        ? "...Vou descobrir quem você é. E quem está por trás disso."
+        : "Não vou ajudar. E vou reportar essa invasão.";
+      await sendRenataMessages([endText]);
+    }
     setMissionComplete(true);
   };
 
@@ -280,7 +264,17 @@ const RenataWindow = ({ zIndex, onFocus, onClose, onMinimize, isMinimized }) => 
               )}
               {missionComplete && (
                 <div className="msg msg-system" style={{ textAlign: 'center', marginTop: '10px' }}>
-                  <div className="msg-bubble" style={{ color: '#ff4444', borderColor: '#ff4444', display: 'inline-block', borderLeft: 'none' }}>[CONEXÃO ENCERRADA]</div>
+                  <div 
+                    className="msg-bubble" 
+                    style={{ 
+                      color: missionStatus === 'success' ? '#00ff00' : '#ff4444', 
+                      borderColor: missionStatus === 'success' ? '#00ff00' : '#ff4444', 
+                      display: 'inline-block', 
+                      borderLeft: 'none' 
+                    }}
+                  >
+                    {missionStatus === 'success' ? '[MISSÃO CONCLUÍDA]' : '[MISSÃO FALHOU - CONEXÃO ENCERRADA]'}
+                  </div>
                 </div>
               )}
               <div ref={chatEndRef} />
@@ -298,15 +292,18 @@ const RenataWindow = ({ zIndex, onFocus, onClose, onMinimize, isMinimized }) => 
                       </div>
                     )}
                   </div>
-                ) : !isTyping && renataPhases[currentPhaseIdx]?.choices.map((c, i) => (
-                  <button 
-                    key={i} 
-                    className="choice-btn"
-                    onClick={() => handleChoice(c)}
-                  >
-                    {c.text}
-                  </button>
-                ))}
+                ) : !isTyping && renataPhases[currentPhaseIdx]?.choices
+                    // Validação de segurança: Filtra diálogos cujos arquivos não foram abertos
+                    .filter(c => !c.requiredFile || discoveredFiles.includes(c.requiredFile))
+                    .map((c, i) => (
+                      <button 
+                        key={i} 
+                        className="choice-btn"
+                        onClick={() => handleChoice(c)}
+                      >
+                        {c.text}
+                      </button>
+                    ))}
               </div>
             )}
           </div>
@@ -314,7 +311,18 @@ const RenataWindow = ({ zIndex, onFocus, onClose, onMinimize, isMinimized }) => 
           <div className="files-container">
             <div className="tree-panel">
               {Object.entries(renataFiles).map(([name, data]) => (
-                <FileTree key={name} name={name} data={data} onFileClick={(n, d) => setPreview({ name: n, ...d })} />
+                <FileTree 
+                  key={name} 
+                  name={name} 
+                  data={data} 
+                  onFileClick={(n, d) => {
+                    setPreview({ name: n, ...d });
+                    // Adiciona o arquivo ao array de descobertas do jogador se já não estiver contido
+                    if (!discoveredFiles.includes(n)) {
+                      setDiscoveredFiles(prev => [...prev, n]);
+                    }
+                  }} 
+                />
               ))}
             </div>
             <div className={`preview-panel ${preview ? 'open' : ''}`}>
