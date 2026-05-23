@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import nexusData from '../../npcs/nexusTutorial.json';
 import './NexusWindow.css';
 
-const NexusWindow = ({ zIndex, onFocus, onClose, onMinimize, isMinimized }) => {
+const NexusWindow = ({ zIndex, onFocus, onClose, onMinimize, isMinimized, onComplete }) => {
   const [messages, setMessages] = useState([]);
   const [currentPhaseIdx, setCurrentPhaseIdx] = useState(0);
   const [isTyping, setIsTyping] = useState(false);
@@ -118,6 +118,10 @@ const NexusWindow = ({ zIndex, onFocus, onClose, onMinimize, isMinimized }) => {
   const handleEndTutorial = () => {
     const endText = "Seus próximos passos agora dependem de você. Boa sorte, parceiro.";
     sendNexusMessages([endText]);
+    
+    setTimeout(() => {
+      if (onComplete) onComplete();
+    }, 1500);
   };
 
   return (

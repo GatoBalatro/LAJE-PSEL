@@ -38,7 +38,7 @@ const FileTree = ({ data, name, onFileClick, path = '' }) => {
   );
 };
 
-const CarlosWindow = ({ zIndex, onFocus, onClose, onMinimize, isMinimized }) => {
+const CarlosWindow = ({ zIndex, onFocus, onClose, onMinimize, isMinimized, onComplete }) => {
   const { completeObjective } = useContext(GameContext);
   
   const [activeTab, setActiveTab] = useState('chat');
@@ -51,6 +51,7 @@ const CarlosWindow = ({ zIndex, onFocus, onClose, onMinimize, isMinimized }) => 
   
   const chatEndRef = useRef(null);
   const typingAudioRef = useRef(null);
+  const initializedRef = useRef(false);
   
   // Estado de posição para o arrasto
   const [position, setPosition] = useState({ x: 150, y: 150 });
@@ -97,16 +98,24 @@ const CarlosWindow = ({ zIndex, onFocus, onClose, onMinimize, isMinimized }) => 
 
   // Inicializar chat
   useEffect(() => {
-    typingAudioRef.current = new Audio('/sounds/typing.mp3');
-    typingAudioRef.current.loop = true;
+    // 1. Prepara o áudio ANTES da trava de segurança
+    if (!typingAudioRef.current) {
+      typingAudioRef.current = new Audio('/sounds/typing.mp3');
+      typingAudioRef.current.loop = true;
+      typingAudioRef.current.volume = 0.15;
+    }
+
+    // 2. Trava para não duplicar as mensagens
+    if (initializedRef.current) return;
+    initializedRef.current = true;
 
     const startPhase = carlosData.phases[0];
     sendCarlosMessages(startPhase.carlos);
 
     return () => {
+      // 3. Apenas pausa o áudio se a janela for fechada, sem destruir a referência
       if (typingAudioRef.current) {
         typingAudioRef.current.pause();
-        typingAudioRef.current = null;
       }
     };
   }, []);
@@ -181,7 +190,7 @@ const CarlosWindow = ({ zIndex, onFocus, onClose, onMinimize, isMinimized }) => 
           success: true,
           affinityScore: affinity
         });
-      }
+      } if (onComplete) onComplete();
     }, 1000);
   };
 

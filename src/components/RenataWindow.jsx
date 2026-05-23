@@ -54,7 +54,8 @@ const RenataWindow = ({ zIndex, onFocus, onClose, onMinimize, isMinimized }) => 
   
   const chatEndRef = useRef(null);
   const typingAudioRef = useRef(null);
-  
+  const initializedRef = useRef(false);
+
   // Estado de posição para o arrasto
   const [position, setPosition] = useState({ x: 200, y: 100 });
   const [isDragging, setIsDragging] = useState(false);
@@ -102,16 +103,24 @@ const RenataWindow = ({ zIndex, onFocus, onClose, onMinimize, isMinimized }) => 
 
   // Inicializar chat
   useEffect(() => {
-    typingAudioRef.current = new Audio('/sounds/typing.mp3');
-    typingAudioRef.current.loop = true;
+    // 1. Prepara o áudio ANTES da trava de segurança
+    if (!typingAudioRef.current) {
+      typingAudioRef.current = new Audio('/sounds/typing.mp3');
+      typingAudioRef.current.loop = true;
+      typingAudioRef.current.volume = 0.15;
+    }
+
+    // 2. Trava para não duplicar as mensagens
+    if (initializedRef.current) return;
+    initializedRef.current = true;
 
     const startPhase = renataData.phases[0];
     sendRenataMessages(startPhase.renata);
 
     return () => {
+      // 3. Apenas pausa o áudio se a janela for fechada, sem destruir a referência
       if (typingAudioRef.current) {
         typingAudioRef.current.pause();
-        typingAudioRef.current = null;
       }
     };
   }, []);
