@@ -11,7 +11,14 @@ import DesktopIcon from "./components/DesktopIcon"; // Import DesktopIcon
 import LoginScreen from "./components/LoginScreen";
 import SystemError from "./components/SystemError";
 import BrokenGlassEffect from "./components/BrokenGlassEffect";
+import RenataWindow from "./components/RenataWindow";
 import "./components/Desktop.css";
+
+const renataData = { 
+  id: 'renata', 
+  name: 'Renata Sousa', 
+  avatar: '/icons/skype_icon.png' 
+};
 
 const DesktopEnvironment = ({ openWindows, handleMinimize, handleFocus, handleClose, handleOpenNPC }) => {
   // Estado que guarda quais janelas estão na tela
@@ -24,10 +31,25 @@ const DesktopEnvironment = ({ openWindows, handleMinimize, handleFocus, handleCl
           iconSrc={npcData.avatar} 
           onClick={() => handleOpenNPC(npcData)} 
         />
+        <DesktopIcon 
+          name="Renata Sousa" 
+          iconSrc="/icons/skype_icon.png" 
+          onClick={() => handleOpenNPC(renataData)} 
+        />
       </div>
 
       {/* Renderiza janelas */}
       {openWindows.map((win) => (
+        win.type === 'renata' ? (
+          <RenataWindow 
+            key={win.id}
+            zIndex={win.zIndex}
+            isMinimized={win.isMinimized}
+            onMinimize={() => handleMinimize(win.id)}
+            onFocus={() => handleFocus(win.id)}
+            onClose={() => handleClose(win.id)}
+          />
+        ) : (
         <NPCWindow
           key={win.id}
           npcData={win.npcData}
@@ -38,6 +60,7 @@ const DesktopEnvironment = ({ openWindows, handleMinimize, handleFocus, handleCl
           onClose={() => handleClose(win.id)}
           onFinish={(winState) => alert(winState ? "Você venceu!" : "Você perdeu.")}
         />
+        )
       ))}
 
       <InventoryWindow zIndex={200} onFocus={() => {}} />
@@ -63,6 +86,7 @@ function AppContent() {
   const handleOpenNPC = (data) => {
     setOpenWindows((prev) => {
       if (prev.some((w) => w.id === data.id)) {
+        handleFocus(data.id);
         return prev;
       }
       const newZ = highestZIndex + 1;
@@ -70,6 +94,7 @@ function AppContent() {
       return [...prev, {
         id: data.id,
         npcData: data,
+        type: data.id === 'renata' ? 'renata' : 'standard',
         zIndex: newZ,
         isMinimized: false,
         name: data.name
