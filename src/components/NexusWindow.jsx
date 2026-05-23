@@ -8,7 +8,8 @@ const NexusWindow = ({ zIndex, onFocus, onClose, onMinimize, isMinimized }) => {
   const [isTyping, setIsTyping] = useState(false);
   const chatEndRef = useRef(null);
   const typingAudioRef = useRef(null);
-  
+  const hasInitialized = useRef(false);
+
   // Estado de posição para o arrasto
   const [position, setPosition] = useState({ x: 100, y: 100 });
   const [isDragging, setIsDragging] = useState(false);
@@ -22,7 +23,6 @@ const NexusWindow = ({ zIndex, onFocus, onClose, onMinimize, isMinimized }) => {
       let nextX = e.clientX - offset.x;
       let nextY = e.clientY - offset.y;
 
-      // Efeito Aero Snap
       const SNAP_THRESHOLD = 30;
       const rect = windowRef.current.getBoundingClientRect();
 
@@ -53,12 +53,17 @@ const NexusWindow = ({ zIndex, onFocus, onClose, onMinimize, isMinimized }) => {
   };
 
   useEffect(() => {
-    typingAudioRef.current = new Audio('/sounds/typing.mp3');
-    typingAudioRef.current.loop = true;
+   if (!typingAudioRef.current) {
+      typingAudioRef.current = new Audio('/sounds/typing.mp3');
+      typingAudioRef.current.loop = true;
+      typingAudioRef.current.volume = 0.15; 
+    }
 
-    // Start first phase
-    const startPhase = nexusData.phases[0];
-    sendNexusMessages(startPhase.renata);
+    if (!hasInitialized.current) {
+      hasInitialized.current = true;
+      const startPhase = nexusData.phases[0];
+      sendNexusMessages(startPhase.renata);
+    }
 
     return () => {
       if (typingAudioRef.current) {
