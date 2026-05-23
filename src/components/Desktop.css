@@ -1,8 +1,8 @@
 body {
   margin: 0;
   padding: 0;
-  /* Wallpaper Windows 7 Clássico (Céu/Harmony) */
-  background-image: url('https://preview.redd.it/windows-7-default-wallpaper-but-without-the-windows-logo-v0-sf36cjalyjhe1.jpeg?auto=webp&s=9a932acfc32ce94fcb269521c5ae58ffb01ab6ea');
+  /* Wallpaper Personalizado */
+  background-image: url('/icons/ardt_wallpaper.png');
   background-size: cover;
   background-position: center;
   background-attachment: fixed;

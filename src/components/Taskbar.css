@@ -12,7 +12,7 @@
   border-top: 1px solid rgba(255, 255, 255, 0.3);
   display: flex;
   align-items: center;
-  padding: 0 45px 0 10px; /* Aumentado para 45px para afastar o relógio da borda lateral */
+  padding: 0 0 0 10px; /* Remove padding direito para o botão de desktop encostar no canto */
   z-index: 9999;
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.2);
   overflow: hidden;
@@ -93,6 +93,7 @@
 .taskbar-icon {
   width: 24px;
   height: 24px;
+  image-rendering: -webkit-optimize-contrast; /* Melhora a nitidez de ícones pequenos */
 }
 
 .system-tray {
@@ -105,7 +106,49 @@
   padding: 0 5px;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px; /* Reduzido para aproximar os ícones */
+  margin-right: 5px;
+}
+
+/* Setinha de ícones ocultos */
+.hidden-icons-arrow {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.hidden-icons-arrow::before {
+  content: '';
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-bottom: 5px solid rgba(255, 255, 255, 0.8);
+}
+
+/* Container do ícone para o efeito de "quadradinho" (igual ao de segurança) */
+.tray-icon-container {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+/* Ícone interno (Rede e Som) */
+.tray-icon {
+  width: 16px;
+  height: 16px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  image-rendering: -webkit-optimize-contrast;
 }
 
 .action-center-icon {
@@ -116,20 +159,22 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.2s;
   border-radius: 3px;
 }
 
-.action-center-icon:hover {
-  background: rgba(255, 255, 255, 0.2);
+/* Unificação do efeito de hover para todos os itens da bandeja */
+.hidden-icons-arrow:hover, .tray-icon-container:hover, .action-center-icon:hover, .clock-container:hover {
+  background-color: rgba(255, 255, 255, 0.2) !important;
+  transition: none !important; /* Remove qualquer efeito de fade/suavização */
 }
 
 .flag-icon {
   width: 16px;
   height: 16px;
-  background-image: url('/icons/win7_flag.png'); /* Você precisará desta imagem */
+  background-image: url('/icons/action_icon.png');
   background-size: contain;
   background-repeat: no-repeat;
+  image-rendering: -webkit-optimize-contrast;
 }
 
 .notification-badge {
@@ -149,11 +194,41 @@
 .clock-container {
   display: flex;
   flex-direction: column;
-  line-height: 1.2;
+  align-items: center; /* Centraliza a hora e a data horizontalmente */
+  line-height: 1.0; /* Deixa a hora e a data mais "apertadas" uma na outra */
+  min-width: 85px; /* Aumentado um pouco para acomodar a fonte maior */
+  text-align: center; /* Garante que o texto interno fique centralizado */
+  cursor: pointer;
+  border-radius: 3px;
+  padding: 4px 6px; 
+}
+
+.clock-container div:first-child {
+  font-size: 14px; /* Aumenta a fonte apenas da hora */
 }
 
 .date-tray {
-  font-size: 10px;
+  font-size: 11px; /* Aumenta a fonte da data */
+  margin-top: 2px;
+}
+
+/* Botão Mostrar Área de Trabalho (Barra Vertical no Canto) */
+.show-desktop-btn {
+  width: 20px; /* Ficou maior e mais fácil de clicar */
+  height: 100%;
+  /* Borda esquerda mais visível para separar do relógio */
+  border-left: 1px solid rgba(255, 255, 255, 0.4);
+  /* Fundo translúcido que dá o efeito de "vidro" */
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(5px);
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: inset 1px 0 0 rgba(255, 255, 255, 0.1);
+}
+
+.show-desktop-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-left: 1px solid rgba(255, 255, 255, 0.6);
 }
 
 .start-menu-aero {

@@ -4,13 +4,17 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: radial-gradient(circle at center, #3a75c4 0%, #002d6d 100%);
+  background-image: url('/icons/login_wallpaper.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   z-index: 99999;
   font-family: 'Segoe UI', sans-serif;
+  transition: opacity 1s ease-in-out, transform 1s ease-in-out;
 }
 
 .login-content {
