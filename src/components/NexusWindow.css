@@ -1,0 +1,207 @@
+/* ===== NEXUS WINDOW THEME ===== */
+.nexus-window {
+  --nexus-primary: #ff3333;
+  --nexus-secondary: #ff6600;
+  --nexus-dark: #1a0000;
+  --nexus-accent: #ffaa00;
+}
+
+.nexus-window .title-bar {
+  background: linear-gradient(to right, #d32f2f, #b71c1c);
+  border-bottom-color: #7f0000;
+  box-shadow: inset 0 1px 0 rgba(255, 100, 100, 0.3);
+}
+
+.nexus-window .title-bar .title {
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.nexus-window .window-tabs {
+  background: linear-gradient(to bottom, #2a2a2a, #1a1a1a);
+  border-bottom-color: #330000;
+}
+
+.nexus-window .window-tabs button {
+  color: #ff6600;
+  border-right-color: #330000;
+  text-transform: uppercase;
+  font-family: 'Courier New', monospace;
+}
+
+.nexus-window .window-tabs button:hover {
+  background: rgba(255, 51, 51, 0.15);
+}
+
+.nexus-window .window-tabs button.active {
+  background: linear-gradient(to bottom, #ff3333, #d32f2f);
+  color: #fff;
+  border-color: #7f0000;
+  box-shadow: inset 0 1px 0 rgba(255, 100, 100, 0.3);
+}
+
+.nexus-window .chat-window {
+  background: #0d0d0d;
+  border-color: #330000;
+  background-image: 
+    repeating-linear-gradient(
+      0deg,
+      rgba(255, 51, 51, 0.02) 0px,
+      rgba(255, 51, 51, 0.02) 1px,
+      transparent 1px,
+      transparent 2px
+    );
+}
+
+.nexus-window .chat-window::-webkit-scrollbar-track {
+  background: #1a0000;
+}
+
+.nexus-window .chat-window::-webkit-scrollbar-thumb {
+  background: #660000;
+}
+
+.nexus-window .chat-window::-webkit-scrollbar-thumb:hover {
+  background: #990000;
+}
+
+.nexus-window .phase-label {
+  color: #ff3333;
+  border-color: rgba(255, 51, 51, 0.5);
+  background: rgba(255, 51, 51, 0.1);
+  font-family: 'Courier New', monospace;
+  text-shadow: 0 0 8px rgba(255, 51, 51, 0.3);
+  letter-spacing: 2px;
+}
+
+.nexus-window .msg-label {
+  color: #ff3333;
+  font-family: 'Courier New', monospace;
+  text-shadow: 0 0 4px rgba(255, 51, 51, 0.5);
+}
+
+.nexus-window .msg-renata .msg-label,
+.nexus-window .msg-nexus .msg-label {
+  color: #ff3333;
+}
+
+.nexus-window .msg-bubble {
+  background: rgba(255, 51, 51, 0.08);
+  border-color: #660000;
+  border-left-color: #ff3333;
+  color: #fff;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+}
+
+.nexus-window .msg-hacker .msg-bubble {
+  border-left-color: #ffaa00;
+  background: rgba(255, 170, 0, 0.08);
+  color: #ffaa00;
+}
+
+.nexus-window .choice-btn {
+  background: linear-gradient(to right, #1a1a1a, #2a2a2a);
+  border-color: #660000;
+  color: #ff3333;
+  font-family: 'Courier New', monospace;
+  text-transform: uppercase;
+  font-size: 10px;
+  letter-spacing: 1px;
+  position: relative;
+  overflow: visible;
+}
+
+.nexus-window .choice-btn::before {
+  content: '>> ';
+  color: #ff3333;
+  font-weight: bold;
+  position: absolute;
+  left: 6px;
+}
+
+.nexus-window .choice-btn {
+  padding-left: 20px;
+}
+
+.nexus-window .choice-btn:hover {
+  background: linear-gradient(to right, #ff3333, #cc0000);
+  color: #fff;
+  border-color: #ff3333;
+  box-shadow: 0 0 12px rgba(255, 51, 51, 0.4);
+}
+
+.nexus-window .choice-btn:active {
+  transform: scale(0.97);
+  box-shadow: 0 0 20px rgba(255, 51, 51, 0.5);
+}
+
+.nexus-window .choice-btn.danger {
+  color: #ff0000;
+  border-color: #ff0000;
+}
+
+.nexus-window .choice-btn.danger:hover {
+  background: linear-gradient(to right, #ff0000, #cc0000);
+  box-shadow: 0 0 15px rgba(255, 0, 0, 0.6);
+}
+
+.nexus-window .choice-btn.secret {
+  color: #ffaa00;
+  border-color: #ffaa00;
+  border-style: dashed;
+  animation: secretPulse 2s infinite;
+}
+
+@keyframes secretPulse {
+  0%, 100% {
+    opacity: 1;
+    text-shadow: none;
+  }
+  50% {
+    opacity: 0.8;
+    text-shadow: 0 0 6px rgba(255, 170, 0, 0.5);
+  }
+}
+
+.nexus-window .choice-btn.secret:hover {
+  background: linear-gradient(to right, #ffaa00, #ff8800);
+  color: #000;
+  animation: none;
+  box-shadow: 0 0 15px rgba(255, 170, 0, 0.6);
+}
+
+.nexus-window .typing {
+  color: #ff3333;
+  font-weight: bold;
+  font-family: 'Courier New', monospace;
+  text-shadow: 0 0 4px rgba(255, 51, 51, 0.5);
+}
+
+/* ===== GLITCH EFFECT (OPTIONAL) ===== */
+@keyframes glitch {
+  0% {
+    text-shadow: -2px 0 #ff3333, 2px 0 #ffaa00;
+  }
+  14% {
+    text-shadow: -2px 0 #ff3333, 2px 0 #ffaa00;
+  }
+  15% {
+    text-shadow: 2px 0 #ff3333, -2px 0 #ffaa00;
+  }
+  49% {
+    text-shadow: 2px 0 #ff3333, -2px 0 #ffaa00;
+  }
+  50% {
+    text-shadow: -2px 0 #ff3333, 2px 0 #ffaa00;
+  }
+  100% {
+    text-shadow: -2px 0 #ff3333, 2px 0 #ffaa00;
+  }
+}
+
+/* Aplicar glitch ocasionalmente (descomente para usar) */
+.nexus-window .phase-label:hover {
+  animation: glitch 0.3s infinite;
+}
