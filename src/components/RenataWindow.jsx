@@ -199,7 +199,7 @@ const RenataWindow = ({ zIndex, onFocus, onClose, onMinimize, isMinimized, onCom
       setMissionStatus('failed');
       await sendRenataMessages([
         "[SISTEMA]: CONEXÃO ENVIADA PARA DISPOSITIVO DE SEGURANÇA.", 
-        "[CONEXÃO CORROMPIDA]: Convencimento final insuficiente (" + affinity + "%). O alvo cortou a comunicação."
+        "[CONEXÃO CORROMPIDA]: Convencimento final insuficiente. O alvo cortou a comunicação."
       ]);
       setMissionComplete(true);
       if (onComplete) onComplete('failed');

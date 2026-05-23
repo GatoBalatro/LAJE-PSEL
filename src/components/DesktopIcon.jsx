@@ -1,4 +1,3 @@
-import React from 'react';
 import './DesktopIcon.css';
 
 const DesktopIcon = ({ name, iconSrc, onClick }) => {

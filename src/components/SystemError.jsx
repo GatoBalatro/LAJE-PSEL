@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useContext } from 'react';
+import { useState, useEffect, useRef, useContext } from 'react';
 import { GameContext } from '../context/GameContext';
 import './NPCWindow.css';
 

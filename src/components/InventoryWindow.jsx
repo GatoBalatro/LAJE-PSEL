@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useRef, useCallback } from 'react';
+import { useContext, useState, useEffect, useRef, useCallback } from 'react';
 import { GameContext } from '../context/GameContext';
 import './InventoryWindow.css';
 

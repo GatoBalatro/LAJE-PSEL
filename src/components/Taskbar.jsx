@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect, useContext } from 'react';
+import { useRef, useState, useEffect, useContext } from 'react';
 import './Taskbar.css';
 import { GameContext } from '../context/GameContext';
 import BalloonNotification from './BalloonNotification';

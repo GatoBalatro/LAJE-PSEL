@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useRef } from 'react';
+import { useState, useEffect, useContext, useRef } from 'react';
 import './NPCWindow.css'; // Estilização Aero Glass aqui
 import { GameContext } from '../context/GameContext'; // Importa o GameContext
 

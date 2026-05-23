@@ -195,7 +195,7 @@ const CarlosWindow = ({ zIndex, onFocus, onClose, onMinimize, isMinimized, onCom
       setMissionStatus('failed');
       await sendCarlosMessages([
         "[SISTEMA]: CONEXÃO PERDIDA.",
-        `[FALHA]: Convencimento insuficiente (${affinity}%). O alvo se recusou a cooperar e bloqueou o acesso.`
+        `[FALHA]: Convencimento insuficiente. O alvo se recusou a cooperar e bloqueou o acesso.`
       ]);
       setMissionComplete(true);
       if (onComplete) onComplete('failed');
