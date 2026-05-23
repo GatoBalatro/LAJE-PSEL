@@ -133,14 +133,14 @@ const CarlosWindow = ({ zIndex, onFocus, onClose, onMinimize, isMinimized, onCom
   const processChoice = async (choice) => {
     setAffinity(prev => Math.max(0, Math.min(100, prev + (choice.da || 0))));
     const nextPhase = carlosPhases[choice.next];
+    
     if (!nextPhase) {
       handleEndGame();
       return;
     }
-
-    setCurrentPhaseIdx(choice.next);
     const response = nextPhase.responses ? (nextPhase.responses[choice.eff] || Object.values(nextPhase.responses)[0]) : nextPhase.carlos;
     const texts = Array.isArray(response) ? response : [response];
+    setCurrentPhaseIdx(choice.next);
     await sendCarlosMessages(texts);
   };
 

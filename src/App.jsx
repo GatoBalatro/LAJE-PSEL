@@ -15,10 +15,10 @@ import NexusWindow from "./components/NexusWindow";
 import CarlosWindow from "./components/CarlosWindow";
 import "./components/Desktop.css";
 
-// Dados dos NPCs
-const renataData = { id: 'renata', name: 'Renata Sousa', avatar: '/icons/renata_icon.png' };
-const nexusData = { id: 'nexus', name: 'NEXUS', avatar: '/icons/nexus_icon.png' };
-const carlosData = { id: 'carlos', name: 'Carlos Silva', avatar: '/icons/carlos_icon.png' };
+// Dados dos NPC
+const nexusData = { id: 'nexus', name: 'NEXUS', avatar: 'icons/nexus_icon.png' };
+const carlosData = { id: 'carlos', name: 'Carlos Silva', avatar: 'icons/carlos_icon.png' };
+const renataData = { id: 'renata', name: 'Renata Sousa', avatar: 'icons/renata_icon.png' };
 
 const DesktopEnvironment = ({ 
   openWindows, handleMinimize, handleFocus, handleClose, handleOpenNPC,
