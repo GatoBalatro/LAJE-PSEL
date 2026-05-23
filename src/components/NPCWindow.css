@@ -24,6 +24,12 @@
     transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
     opacity 0.2s ease-in-out,
     visibility 0.25s;
+
+    width: 600px;              /* Define a largura fixa da janela */
+    height: 500px;             /* Define a altura fixa da janela */
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
 }
 
 .terminal-window.minimized {
@@ -95,6 +101,11 @@
   color: #ff4444 !important; /* Mensagens do NPC em vermelho */
   margin-bottom: 10px;
   text-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+   max-width: 100%;           /* Impede que o elemento ultrapasse o container pai */
+    overflow-wrap: break-word; /* Força a quebra de palavras longas */
+    word-break: break-word;    /* Compatibilidade adicional para quebra de texto */
+    white-space: pre-wrap;     /* Preserva quebras de linha do sistema sem estourar a largura */
+
 }
 
 /* Mensagens do Jogador (Hacker) em Verde */

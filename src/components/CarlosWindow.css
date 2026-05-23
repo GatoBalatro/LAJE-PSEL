@@ -33,19 +33,29 @@
 }
 
 .carlos-window .chat-window {
+  flex: 1;                   /* Se o container pai for flex, ou defina um height fixo */
+    height: 300px;             /* Ajuste o valor conforme o design da interface */
+    overflow-y: auto;          /* Ativa o scroll vertical quando o texto transbordar */
+    overflow-x: hidden;         /* Corta qualquer overflow horizontal residual */
   background: #1a1a1a;
   border-color: #333;
 }
 
 .carlos-window .chat-window::-webkit-scrollbar-track {
+  flex: 1;                   /* Se o container pai for flex, ou defina um height fixo */
+    height: 300px;             /* Ajuste o valor conforme o design da interface */
+    overflow-y: auto;          /* Ativa o scroll vertical quando o texto transbordar */
+    overflow-x: hidden;         /* Corta qualquer overflow horizontal residual */
   background: #222;
 }
 
 .carlos-window .chat-window::-webkit-scrollbar-thumb {
+
   background: #0078d7;
 }
 
 .carlos-window .chat-window::-webkit-scrollbar-thumb:hover {
+
   background: #0099ff;
 }
 
@@ -79,7 +89,13 @@
   color: #ff4444; /* Carlos em vermelho */
   font-family: 'Courier New', monospace;
   font-size: 11px;
+
+    max-width: 100%;           /* Impede que o elemento ultrapasse o container pai */
+    overflow-wrap: break-word; /* Força a quebra de palavras longas */
+    word-break: break-word;    /* Compatibilidade adicional para quebra de texto */
+    white-space: pre-wrap;     /* Preserva quebras de linha do sistema sem estourar a largura */
 }
+
 
 .carlos-window .msg-carlos .msg-bubble {
   border-left-color: #ff6600;
@@ -444,6 +460,10 @@
   }
 
   .carlos-window .chat-window {
+    flex: 1;                   /* Se o container pai for flex, ou defina um height fixo */
+    height: 300px;             /* Ajuste o valor conforme o design da interface */
+    overflow-y: auto;          /* Ativa o scroll vertical quando o texto transbordar */
+    overflow-x: hidden;         /* Corta qualquer overflow horizontal residual */
     max-height: 250px;
   }
 

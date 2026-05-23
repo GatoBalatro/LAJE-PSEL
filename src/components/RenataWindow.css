@@ -192,6 +192,10 @@
 
 /* ===== CHAT WINDOW (SCROLLABLE) ===== */
 .chat-window {
+  flex: 1;                   /* Se o container pai for flex, ou defina um height fixo */
+    height: 300px;             /* Ajuste o valor conforme o design da interface */
+    overflow-y: auto;          /* Ativa o scroll vertical quando o texto transbordar */
+    overflow-x: hidden;         /* Corta qualquer overflow horizontal residual */
   flex: 1;
   background: #1a1a1a;
   border: 1px solid #333;
@@ -230,6 +234,10 @@
 .chat-window {
   scrollbar-color: #555 #222;
   scrollbar-width: thin;
+  flex: 1;                   /* Se o container pai for flex, ou defina um height fixo */
+    height: 300px;             /* Ajuste o valor conforme o design da interface */
+    overflow-y: auto;          /* Ativa o scroll vertical quando o texto transbordar */
+    overflow-x: hidden;         /* Corta qualquer overflow horizontal residual */
 }
 
 .phase-label {
@@ -300,6 +308,11 @@
   border-left: 3px solid #ff4444;
   background: rgba(255, 102, 0, 0.08);
   color: #ff4444; /* Renata em vermelho */
+   max-width: 100%;           /* Impede que o elemento ultrapasse o container pai */
+    overflow-wrap: break-word; /* Força a quebra de palavras longas */
+    word-break: break-word;    /* Compatibilidade adicional para quebra de texto */
+    white-space: pre-wrap;     /* Preserva quebras de linha do sistema sem estourar a largura */
+
 }
 
 .msg-hacker .msg-bubble {
@@ -307,6 +320,11 @@
   background: rgba(0, 255, 0, 0.05);
   color: #00ff00;
   margin-left: 20px;
+   max-width: 100%;           /* Impede que o elemento ultrapasse o container pai */
+    overflow-wrap: break-word; /* Força a quebra de palavras longas */
+    word-break: break-word;    /* Compatibilidade adicional para quebra de texto */
+    white-space: pre-wrap;     /* Preserva quebras de linha do sistema sem estourar a largura */
+
 }
 
 .typing {
@@ -541,7 +559,11 @@
   }
 
   .chat-window {
-    max-height: 250px;
+    max-height: 300px;
+    flex: 1;                   /* Se o container pai for flex, ou defina um height fixo */
+    height: 300px;             /* Ajuste o valor conforme o design da interface */
+    overflow-y: auto;          /* Ativa o scroll vertical quando o texto transbordar */
+    overflow-x: hidden;         /* Corta qualquer overflow horizontal residual */
   }
 
   .choices-area {
