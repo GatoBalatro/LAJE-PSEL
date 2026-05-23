@@ -25,6 +25,9 @@ const NexusWindow = ({
   const [isDragging, setIsDragging] = useState(false);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
   const windowRef = useRef(null);
+  
+  // Identificador de sessão para abortar loops concorrentes antigos do terminal
+  const typingSessionRef = useRef(0);
 
   useEffect(() => {
     const handleMouseMove = (e) => {
@@ -84,8 +87,14 @@ const NexusWindow = ({
       } else if (overrideMode === 'both_success') {
         sendNexusMessages(["Bom trabalho! Ambas as fases foram concluídas com sucesso.", "Redirecionando..."]);
         setTimeout(() => {
-          window.open('https://www.youtube.com/watch?v=oHg5SJYRHA0', '_blank');
-        }, 4000);
+  const newWindow = window.open('https://www.youtube.com/watch?v=dQw4w9WgXcQ', '_blank');
+  if (newWindow) {
+    newWindow.focus();
+  } else {
+    // Fallback se o popup for bloqueado
+    window.location.href = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
+  }
+}, 4000);
       }
       return;
     }
@@ -160,29 +169,40 @@ const NexusWindow = ({
 
   const sendNexusMessages = async (texts) => {
     setIsTyping(true);
+    typingSessionRef.current += 1;
+    const currentSession = typingSessionRef.current;
+
     for (const text of texts) {
+      if (currentSession !== typingSessionRef.current) break;
+      
       let displayed = "";
-      setMessages(prev => [...prev, { who: 'nexus', text: "", isTyping: true }]);
+      const msgId = `${Date.now()}-${Math.random()}`;
+      
+      setMessages(prev => [...prev, { id: msgId, who: 'nexus', text: "", isTyping: true }]);
       
       for (let i = 0; i < text.length; i++) {
+        if (currentSession !== typingSessionRef.current) break;
         displayed += text[i];
-        setMessages(prev => {
-          const updated = [...prev];
-          updated[updated.length - 1].text = displayed;
-          return updated;
-        });
+
+        setMessages(prev => prev.map(m => m.id === msgId ? { ...m, text: displayed } : m));
         await new Promise(r => setTimeout(r, 20));
       }
+
+      if (currentSession !== typingSessionRef.current) break;
+      setMessages(prev => prev.map(m => m.id === msgId ? { ...m, isTyping: false } : m));
       await new Promise(r => setTimeout(r, 500));
     }
-    await new Promise(r => setTimeout(r, 800));
-    setIsTyping(false);
+    
+    if (currentSession === typingSessionRef.current) {
+      await new Promise(r => setTimeout(r, 800));
+      setIsTyping(false);
+    }
   };
 
   const handleChoice = (choice) => {
     let hackerText = choice.text;
     if (hackerText.startsWith('root@nexus')) {
-      // Keep root instructions
+      // Manter
     } else if (hackerText.startsWith('> "')) {
       hackerText = hackerText.substring(2);
     }
@@ -222,7 +242,7 @@ const NexusWindow = ({
           <div className="chat-window">
             <div className="phase-label">{nexusData.phases[currentPhaseIdx]?.label}</div>
             {messages.map((m, i) => (
-              <div key={i} className={`msg msg-${m.who}`}>
+              <div key={m.id || i} className={`msg msg-${m.who}`}>
                 <div className="msg-label">{m.who === 'hacker' ? '[RECRUIT@NEXUS]' : '[SYSTEM: NEXUS]'}</div>
                 <div className="msg-bubble">{m.text}</div>
               </div>
