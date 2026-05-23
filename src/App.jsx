@@ -116,6 +116,26 @@ function AppContent() {
   const [tutorialCompleted, setTutorialCompleted] = useState(false);
   const [carlosCompleted, setCarlosCompleted] = useState(false);
 
+  // Inicializa a ambiência sonora na abertura do jogo
+  useEffect(() => {
+    const bgMusic = new Audio('/sounds/background_ambient.mp3'); // Certifique-se que o arquivo existe
+    bgMusic.loop = true;
+    bgMusic.volume = 0.3;
+
+    const handleInitialPlay = () => {
+      bgMusic.play().catch(() => {});
+      // Remove o listener após o primeiro clique para não disparar novamente
+      window.removeEventListener('mousedown', handleInitialPlay);
+    };
+
+    window.addEventListener('mousedown', handleInitialPlay);
+
+    return () => {
+      bgMusic.pause();
+      window.removeEventListener('mousedown', handleInitialPlay);
+    };
+  }, []);
+
   const handleFocus = (id) => {
     setOpenWindows((prev) => {
       const newZ = highestZIndex + 1;

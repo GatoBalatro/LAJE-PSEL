@@ -99,12 +99,15 @@ const Taskbar = ({ windows, onToggleMinimize }) => {
             onClick={() => onToggleMinimize(win.id)}
             title={win.name}
           >
-            <img src="/icons/skype_icon.png" alt="icon" className="taskbar-icon" />
+            <img src="/icons/skype_icon.png" alt="Skype" className="taskbar-icon" />
             <div className="hover-glow"></div>
           </div>
         ))}
       </div>
       <div className="system-tray">
+        {/* Setinha de ícones ocultos */}
+        <div className="hidden-icons-arrow" title="Mostrar ícones ocultos"></div>
+
         <div 
           className={`action-center-icon ${notificationCount > 0 ? 'has-notifications' : ''}`}
           onClick={clearNotifications}
@@ -113,12 +116,26 @@ const Taskbar = ({ windows, onToggleMinimize }) => {
           <div className="flag-icon"></div>
           {notificationCount > 0 && <span className="notification-badge">{notificationCount}</span>}
         </div>
+
+        {/* Ícones de Rede e Som (Fakes) */}
+        <div className="tray-icon-container" title="Internet">
+          <div className="tray-icon" style={{ backgroundImage: "url('/icons/network_icon.png')" }}></div>
+        </div>
+        
+        {/* Ícone de Áudio (Fake) */}
+        <div className="tray-icon-container" title="Áudio">
+          <div className="tray-icon" style={{ backgroundImage: "url('/icons/volume_icon.png')" }}></div>
+        </div>
+
         <div className="clock-container">
           <div>{time.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', hour12: false })}</div>
           <div className="date-tray">{time.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' })}</div>
         </div>
         <BalloonNotification />
       </div>
+
+      {/* Botão Mostrar Área de Trabalho (Barra Vertical no Canto) */}
+      <div className="show-desktop-btn" title="Mostrar área de trabalho"></div>
     </div>
   );
 };
