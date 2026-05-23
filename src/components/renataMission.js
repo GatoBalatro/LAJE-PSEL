@@ -135,11 +135,11 @@ Artigos sobre técnicas modernas de drenagem urbana. Material de atualização p
 export const renataPhases = [
   {
     label: 'FASE 1 — PRIMEIRO CONTATO',
-    renata: ['Quem acessou meu computador?', 'Tem 30 segundos pra explicar antes de eu chamar a polícia.'],
+    renata: ['[SYSTEM]: ALERTA DE ACESSO REMOTO NÃO AUTORIZADO', 'Quem acessou meu computador?', 'Tem 30 segundos pra explicar antes de eu chamar a polícia.'],
     choices: [
-      { text: '> "Eu li seus arquivos. O que fizeram com seu projeto foi crime. E eu posso provar."', da: 15, ds: 5, next: 1, eff: 'expose' },
-      { text: '> "Sou alguém que sabe o que a Construtora Delta fez com você."', da: 5, ds: 20, next: 1, eff: 'delta' },
-      { text: '> "Preciso da sua ajuda para algo que vai afetar essa cidade."', da: 0, ds: 10, next: 1, eff: 'vague' },
+      { text: 'root@nexus:~# inject --msg "Eu li seus arquivos..."', da: 15, ds: 5, next: 1, eff: 'expose' },
+      { text: 'root@nexus:~# send --target "Delta_Info"', da: 5, ds: 20, next: 1, eff: 'delta' },
+      { text: 'root@nexus:~# run exploit.sh --vague', da: 0, ds: 10, next: 1, eff: 'vague' },
     ]
   },
   {

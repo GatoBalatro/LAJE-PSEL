@@ -16,7 +16,7 @@ import CarlosWindow from "./components/CarlosWindow";
 import "./components/Desktop.css";
 
 // Dados dos NPCs
-const renataData = { id: 'renata', name: 'Renata Sousa', avatar: '/icons/skype_icon.png' };
+const renataData = { id: 'renata', name: 'Renata Sousa', avatar: '/icons/renata_icon.png' };
 const nexusData = { id: 'nexus', name: 'NEXUS', avatar: '/icons/nexus_icon.png' };
 const carlosData = { id: 'carlos', name: 'Carlos Silva', avatar: '/icons/carlos_icon.png' };
 
@@ -116,6 +116,26 @@ function AppContent() {
   const [tutorialCompleted, setTutorialCompleted] = useState(false);
   const [carlosCompleted, setCarlosCompleted] = useState(false);
 
+  const handleFocus = (id) => {
+    setOpenWindows((prev) => {
+      const newZ = highestZIndex + 1;
+      setHighestZIndex(newZ);
+      return prev.map((w) => (w.id === id ? { ...w, zIndex: newZ, isMinimized: false } : w));
+    });
+  };
+
+  const handleMinimize = (id) => {
+    setOpenWindows((prev) =>
+      prev.map((win) =>
+        win.id === id ? { ...win, isMinimized: !win.isMinimized } : win
+      )
+    );
+  };
+
+  const handleClose = (id) => {
+    setOpenWindows((prev) => prev.filter((win) => win.id !== id));
+  };
+
   const handleOpenNPC = (data) => {
     setOpenWindows((prev) => {
       if (prev.some((w) => w.id === data.id)) {
@@ -135,22 +155,8 @@ function AppContent() {
     });
   };
 
-  const handleFocus = (id) => {
-    const newZ = highestZIndex + 1;
-    setHighestZIndex(newZ);
-    setOpenWindows(prev => prev.map(w => {
-      if (w.id === id) return { ...w, zIndex: newZ, isMinimized: false };
-      return w;
-    }).sort((a, b) => a.zIndex - b.zIndex));
-  };
-
-  const handleClose = (id) => setOpenWindows(prev => prev.filter(w => w.id !== id));
-  const handleMinimize = (id) => setOpenWindows(prev => prev.map(w => w.id === id ? { ...w, isMinimized: !w.isMinimized } : w));
-
-  if (!isLoggedIn) return <LoginScreen />;
-
-  return (
-    <DesktopEnvironment 
+  return isLoggedIn ? (
+    <DesktopEnvironment
       openWindows={openWindows}
       handleMinimize={handleMinimize}
       handleFocus={handleFocus}
@@ -161,15 +167,15 @@ function AppContent() {
       onTutorialComplete={() => setTutorialCompleted(true)}
       onCarlosComplete={() => setCarlosCompleted(true)}
     />
+  ) : (
+    <LoginScreen />
   );
 }
 
-function App() {
+export default function App() {
   return (
     <GameProvider>
       <AppContent />
     </GameProvider>
   );
 }
-
-export default App;

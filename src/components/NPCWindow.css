@@ -1,3 +1,126 @@
+/* Estilo para a nova Janela de Terminal - Mantém a dinâmica de arraste */
+.terminal-window {
+  position: absolute; /* OBRIGATÓRIO para o arraste funcionar */
+  display: flex !important;
+  flex-direction: column;
+  /* Estilo Terminal Sólido */
+  background: #000000 !important;
+  
+  border: 1px solid #888 !important; /* Borda fina lateral e superior */
+  border-bottom: 5px solid #888 !important; /* Borda inferior cinza como detalhe */
+  border-radius: 10px !important; /* Arredondamento um pouco mais seco */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); /* Removido o inset glow para evitar "bordas" fantasmas */
+  min-width: 450px;
+  user-select: none;
+  z-index: 100;
+  overflow: hidden; 
+  
+  transform-origin: center bottom; /* Faz a janela encolher em direção à base/barra */
+
+  /* Animação suave estilo Windows 7 Aero */
+  animation: aero-window-open 0.35s cubic-bezier(0.1, 0.9, 0.2, 1) both;
+
+  transition: 
+    transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+    opacity 0.2s ease-in-out,
+    visibility 0.25s;
+}
+
+.terminal-window.minimized {
+  transform: scale(0.3) translateY(400px); /* Encolhe e "mergulha" para o fundo */
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.terminal-window .title-bar {
+  background: #333 !important; /* Cinza escuro sólido unificado */
+  border-bottom: none !important; /* Remove a borda para fundir com as abas */
+  border-radius: 10px 10px 0 0; 
+  cursor: move; /* Indica que a área é arrastável */
+  padding: 8px 15px;
+}
+
+.window-icon {
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+.terminal-window .title {
+  font-family: 'Courier New', Courier, monospace !important;
+  color: #eee !important; /* Texto claro para fundo escuro */
+  font-weight: 600;
+}
+
+.terminal-window .controls button {
+  background: #444 !important; /* Botões acompanhando o tom escuro */
+  border: 1px solid #555 !important;
+  color: #eee !important;
+  border-radius: 3px;
+  font-weight: bold;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3); /* Substituído o branco puro por transparência sutil */
+  font-family: Arial, sans-serif; /* Fonte mais limpa para os ícones */
+}
+
+/* Brilho azul ao passar o mouse nos controles (Minimizar) */
+.terminal-window .controls .minimize:hover {
+  background: linear-gradient(to bottom, #7bb9e8 0%, #2989d8 50%, #1e7ec1 51%, #055fa3 100%) !important;
+  border-color: #004a80 !important;
+  color: white !important;
+  box-shadow: 0 0 10px rgba(41, 137, 216, 0.6) !important;
+}
+
+/* Brilho vermelho ao passar o mouse no Close (Windows 7 Style) */
+.terminal-window .controls .close:hover {
+  background: linear-gradient(to bottom, #f5a99e 0%, #e81123 50%, #d4101f 51%, #ac0e19 100%) !important;
+  border-color: #b2101e !important;
+  color: white !important;
+  box-shadow: 0 0 10px rgba(232, 17, 35, 0.6) !important;
+}
+
+.terminal-window .window-body {
+  background: #000000 !important; /* Fundo totalmente preto */
+  border: none !important;
+  margin: 0 !important; /* Remove margens que causavam o efeito "metade branco" */
+  padding: 15px;
+}
+
+.terminal-window .msg-bubble {
+  background: transparent !important; /* Remove o aspecto de "balão" */
+  border: none !important;
+  border-left: 2px solid rgba(255, 0, 0, 0.4) !important; /* Linha lateral em vermelho para o NPC */
+  border-radius: 0 !important; 
+  color: #ff4444 !important; /* Mensagens do NPC em vermelho */
+  margin-bottom: 10px;
+  text-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+}
+
+/* Mensagens do Jogador (Hacker) em Verde */
+.terminal-window .msg-hacker .msg-bubble {
+  color: #00ff00 !important;
+  border-left-color: rgba(0, 255, 0, 0.4) !important;
+  text-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+}
+
+/* Estilos específicos para o Popup de Erro de Sistema */
+.system-error-popup {
+  min-width: 380px !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5) !important;
+}
+
+.system-error-popup .window-body {
+  padding-bottom: 0 !important;
+}
+
+/* Estilo para abas quando presentes (Renata/Carlos) */
+.terminal-window .window-tabs {
+  background: rgba(0, 30, 0, 0.4);
+  display: flex;
+  border-bottom: 1px solid rgba(0, 255, 0, 0.2);
+}
+
 .aero-window {
   position: absolute;
   display: flex !important; /* Garante que não está como none */
@@ -180,12 +303,80 @@
 }
 
 .status-bar {
-  background: #f0f0f0;
+  /* Ajuste para o rodapé combinar com o terminal transparente */
+  background: rgba(0, 20, 0, 0.5) !important;
   padding: 3px 10px;
   font-size: 11px;
-  color: #666;
-  border-top: 1px solid #ccc;
-  border-radius: 0 0 8px 8px;
+  color: rgba(0, 255, 0, 0.7);
+  border-top: 1px solid rgba(0, 255, 0, 0.1);
+  border-radius: 0 0 20px 20px;
+}
+
+/* Animação de abertura suave */
+@keyframes aero-window-open {
+  0% {
+    opacity: 0;
+    transform: scale(0.95) translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Estilo para os botões de escolha no Terminal */
+.choice-btn, .terminal-button {
+  background: rgba(0, 255, 0, 0.05);
+  border: 1px solid rgba(0, 255, 0, 0.3);
+  color: #00ff00;
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin-bottom: 5px;
+  font-family: 'Courier New', monospace;
+  transition: all 0.2s;
+  text-align: left;
+}
+
+.choice-btn:hover, .terminal-button:hover {
+  background: rgba(0, 255, 0, 0.2);
+  border-color: #00ff00;
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.2);
+}
+
+/* Correção para o botão de perigo/vermelho */
+.choice-btn.danger {
+  border-color: #ff4444;
+  color: #ff4444;
+}
+
+.choice-btn.danger:hover {
+  background: #ff4444 !important;
+  color: #ffffff !important; 
+  border-color: #ff0000;
+}
+
+/* Linha de digitação ativa (estilo Emily is Away) */
+.player-typing-line {
+  display: flex;
+  align-items: center;
+  color: #00ff00; /* Texto do prompt em verde */
+  font-family: 'Courier New', monospace;
+  padding: 10px;
+  border-left: 2px solid #00ff00;
+  background: rgba(0, 255, 0, 0.05);
+  margin-top: 10px;
+}
+
+.cursor {
+  width: 8px;
+  height: 15px;
+  background: #00ff00; /* Cursor em verde */
+  margin-left: 5px;
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
 }
 
 .skype-status {

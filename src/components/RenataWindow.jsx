@@ -1,11 +1,8 @@
-import { useState, useEffect, useRef, useContext } from 'react';
-import { GameContext } from '../context/GameContext';
-import renataData from '../../npcs/RenataMission.json';
-import { renataFiles } from './renataMission';
-
+import React, { useState, useEffect, useRef } from 'react';
+import { renataFiles, renataPhases } from './renataMission';
 import './RenataWindow.css';
 
-const FileTree = ({ data, name, onFileClick, path = '' }) => {
+const FileTree = ({ data, name, onFileClick }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   if (data.type === 'folder') {
@@ -17,13 +14,7 @@ const FileTree = ({ data, name, onFileClick, path = '' }) => {
         {isOpen && (
           <div className="folder-children">
             {Object.entries(data.children).map(([childName, childData]) => (
-              <FileTree 
-                key={childName} 
-                name={childName} 
-                data={childData} 
-                onFileClick={onFileClick}
-                path={path + '/' + name}
-              />
+              <FileTree key={childName} name={childName} data={childData} onFileClick={onFileClick} />
             ))}
           </div>
         )}
@@ -40,8 +31,6 @@ const FileTree = ({ data, name, onFileClick, path = '' }) => {
 };
 
 const RenataWindow = ({ zIndex, onFocus, onClose, onMinimize, isMinimized }) => {
-  const { completeObjective } = useContext(GameContext);
-  
   const [activeTab, setActiveTab] = useState('chat');
   const [affinity, setAffinity] = useState(0);
   const [suspicion, setSuspicion] = useState(0);
@@ -49,36 +38,38 @@ const RenataWindow = ({ zIndex, onFocus, onClose, onMinimize, isMinimized }) => 
   const [currentPhaseIdx, setCurrentPhaseIdx] = useState(0);
   const [isTyping, setIsTyping] = useState(false);
   const [preview, setPreview] = useState(null);
-  const [missionComplete, setMissionComplete] = useState(false);
-  const [missionSuccess, setMissionSuccess] = useState(false);
-  
   const chatEndRef = useRef(null);
   const typingAudioRef = useRef(null);
-  const initializedRef = useRef(false);
+  const keyAudioRef = useRef(new Audio('/sounds/key_press.mp3'));
+  const hasInitialized = useRef(false);
+  const [missionComplete, setMissionComplete] = useState(false);
 
-  // Estado de posição para o arrasto
-  const [position, setPosition] = useState({ x: 200, y: 100 });
+  // Estados para digitação "Emily is Away"
+  const [isPlayerTyping, setIsPlayerTyping] = useState(false);
+  const [playerTargetText, setPlayerTargetText] = useState("");
+  const [playerCurrentText, setPlayerCurrentText] = useState("");
+  const [pendingChoice, setPendingChoice] = useState(null);
+  
+  // Estado de posição para o arrasto (Consistência Aero)
+  const [position, setPosition] = useState({ x: 120, y: 80 });
   const [isDragging, setIsDragging] = useState(false);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
   const windowRef = useRef(null);
 
   const pathToF3 = suspicion >= 60 && affinity >= 40;
 
-  // Gerenciar movimentação da janela
   useEffect(() => {
     const handleMouseMove = (e) => {
       if (!isDragging || !windowRef.current) return;
       
       let nextX = e.clientX - offset.x;
       let nextY = e.clientY - offset.y;
-
-      const SNAP_THRESHOLD = 30;
       const rect = windowRef.current.getBoundingClientRect();
+      const TASKBAR_HEIGHT = 45;
 
-      if (nextX < SNAP_THRESHOLD) nextX = 0;
-      if (nextY < SNAP_THRESHOLD) nextY = 0;
-      if (window.innerWidth - (nextX + rect.width) < SNAP_THRESHOLD) nextX = window.innerWidth - rect.width;
-      if (window.innerHeight - (nextY + rect.height) < SNAP_THRESHOLD) nextY = window.innerHeight - rect.height;
+      // Movimentação fluida com limites
+      nextX = Math.max(0, Math.min(nextX, window.innerWidth - rect.width));
+      nextY = Math.max(0, Math.min(nextY, window.innerHeight - rect.height - TASKBAR_HEIGHT));
 
       setPosition({ x: nextX, y: nextY });
     };
@@ -94,170 +85,166 @@ const RenataWindow = ({ zIndex, onFocus, onClose, onMinimize, isMinimized }) => 
     };
   }, [isDragging, offset]);
 
+  // Timer para fechar a janela automaticamente após o fim da conversa
+  useEffect(() => {
+    if (missionComplete && onClose) {
+      const timer = setTimeout(() => {
+        onClose();
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [missionComplete, onClose]);
+
   const handleMouseDown = (e) => {
-    if (e.target.closest('.controls') || e.target.closest('.window-tabs')) return;
+    if (e.target.closest('.controls')) return;
     setIsDragging(true);
     setOffset({ x: e.clientX - position.x, y: e.clientY - position.y });
     if (onFocus) onFocus();
   };
 
-  // Inicializar chat
   useEffect(() => {
-    // 1. Prepara o áudio ANTES da trava de segurança
-    if (!typingAudioRef.current) {
-      typingAudioRef.current = new Audio('/sounds/typing.mp3');
-      typingAudioRef.current.loop = true;
-      typingAudioRef.current.volume = 0.15;
-    }
+    if (hasInitialized.current) return;
+    hasInitialized.current = true;
 
-    // 2. Trava para não duplicar as mensagens
-    if (initializedRef.current) return;
-    initializedRef.current = true;
+    typingAudioRef.current = new Audio('/sounds/typing.mp3');
+    typingAudioRef.current.loop = true;
 
-    const startPhase = renataData.phases[0];
+    // Start first phase
+    const startPhase = renataPhases[0];
     sendRenataMessages(startPhase.renata);
 
     return () => {
-      // 3. Apenas pausa o áudio se a janela for fechada, sem destruir a referência
       if (typingAudioRef.current) {
         typingAudioRef.current.pause();
+        typingAudioRef.current = null;
       }
     };
   }, []);
 
-  // Scroll automático
+  // Listener para digitação do jogador
   useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages, isTyping]);
+    const handleKeyDown = (e) => {
+      if (!isPlayerTyping) return;
+      
+      // Qualquer tecla (exceto teclas de sistema) avança a digitação
+      if (e.key.length === 1 || e.key === 'Backspace' || e.key === ' ') {
+        if (playerCurrentText.length < playerTargetText.length) {
+          const nextChar = playerTargetText[playerCurrentText.length];
+          setPlayerCurrentText(prev => prev + nextChar);
 
-  // Verificar derrota (suspeita 100%)
-  useEffect(() => {
-    if (suspicion >= 100 && !missionComplete) {
-      handleMissionFail();
-    }
-  }, [suspicion, missionComplete]);
-
-  const sendRenataMessages = async (texts) => {
-    for (const text of texts) {
-      setIsTyping(true);
-
-      if (typingAudioRef.current) {
-        typingAudioRef.current.play().catch(err => console.warn("Áudio aguardando interação:", err));
+          keyAudioRef.current.currentTime = 0;
+          keyAudioRef.current.volume = 0.25 + Math.random() * 0.3; // Volume variável entre 0.25 e 0.55
+          keyAudioRef.current.play().catch(() => {});
+        } else if (playerCurrentText.length === playerTargetText.length) {
+          // Terminou de digitar
+          finishPlayerTyping();
+        }
       }
+    };
 
-      await new Promise(r => setTimeout(r, 1400));
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isPlayerTyping, playerCurrentText, playerTargetText]);
 
-      setIsTyping(false);
+  const processChoice = async (choice) => {
+    setAffinity(prev => Math.max(0, Math.min(100, prev + (choice.da || 0))));
+    setSuspicion(prev => Math.max(0, Math.min(100, prev + (choice.ds || 0))));
 
-      if (typingAudioRef.current) {
-        typingAudioRef.current.pause();
-        typingAudioRef.current.currentTime = 0;
-      }
-
-      setMessages(prev => [...prev, { who: 'renata', text }]);
-      await new Promise(r => setTimeout(r, 300));
-    }
-  };
-
-  const setStatValues = (deltaAffinity, deltaSuspicion) => {
-    setAffinity(prev => Math.max(0, Math.min(100, prev + deltaAffinity)));
-    setSuspicion(prev => Math.max(0, Math.min(100, prev + deltaSuspicion)));
-  };
-
-  const getAffinityStatus = () => {
-    if (affinity < 30) return 'Desconfiada. Muita resistência.';
-    if (affinity < 60) return 'Abalada. Começando a ceder.';
-    if (affinity < 85) return 'Vulnerável. Próxima de cooperar.';
-    return 'Cooperativa. Possível acordo.';
-  };
-
-  const getSuspicionStatus = () => {
-    if (suspicion < 30) return 'Cuidadosa. Monitorando você.';
-    if (suspicion < 60) return 'Suspeitosa. Desconfiança crescente.';
-    if (suspicion < 85) return 'Muito desconfiada. Pronta para agir.';
-    return 'CRÍTICO. Vai te denunciar!';
-  };
-
-  const handleChoice = async (choice) => {
-    setMessages(prev => [...prev, { who: 'hacker', text: choice.text.replace('> ', '') }]);
-    setStatValues(choice.da || 0, choice.ds || 0);
-
-    // Verificar derrota instantânea
-    if (suspicion + (choice.ds || 0) >= 100) {
-      setTimeout(() => handleMissionFail(), 600);
-      return;
-    }
-
-    const nextPhase = renataData.phases[choice.next];
-    
+    const nextPhase = renataPhases[choice.next];
     if (!nextPhase) {
-      handleMissionSuccess();
+      handleEndGame();
       return;
     }
 
     setCurrentPhaseIdx(choice.next);
-    const response = nextPhase.responses 
-      ? (nextPhase.responses[choice.eff] || Object.values(nextPhase.responses)[0])
-      : nextPhase.renata;
+    const response = nextPhase.responses ? (nextPhase.responses[choice.eff] || Object.values(nextPhase.responses)[0]) : nextPhase.renata;
     const texts = Array.isArray(response) ? response : [response];
     await sendRenataMessages(texts);
   };
 
-  const handleMissionSuccess = async () => {
-    const endText = "...Vou descobrir quem você é. E quem está por trás disso.";
-    await sendRenataMessages([endText]);
-    
-    setTimeout(() => {
-      setMissionSuccess(true);
-      setMissionComplete(true);
-      if (completeObjective) {
-        completeObjective({
-          id: 'renata_mission',
-          name: 'Investigação de Renata',
-          success: true,
-          affinityScore: affinity,
-          suspicionScore: suspicion,
-          pathF3: pathToF3
-        });
-      }
-    }, 1500);
+  const finishPlayerTyping = async () => {
+    setIsPlayerTyping(false);
+    const finalMsg = playerTargetText;
+    setMessages(prev => [...prev, { who: 'hacker', text: finalMsg }]);
+    setPlayerCurrentText("");
+    setPlayerTargetText("");
+    const choiceToProcess = pendingChoice;
+    setPendingChoice(null);
+    await processChoice(choiceToProcess);
   };
 
-  const handleMissionFail = async () => {
-    const endText = "Não vou ajudar. E vou reportar essa invasão.";
-    await sendRenataMessages([endText]);
-    
-    setTimeout(() => {
-      setMissionSuccess(false);
-      setMissionComplete(true);
-      if (completeObjective) {
-        completeObjective({
-          id: 'renata_mission',
-          name: 'Investigação de Renata',
-          success: false,
-          affinityScore: affinity,
-          suspicionScore: suspicion
+  
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages, isTyping]);
+
+  const sendRenataMessages = async (texts) => {
+    setIsTyping(true);
+    for (const text of texts) {
+      // Efeito Typewriter para o NPC (Renata)
+      let displayed = "";
+      // Adicionamos um objeto de mensagem vazio que será preenchido caractere por caractere
+      setMessages(prev => [...prev, { who: 'renata', text: "", isTyping: true }]);
+      
+      for (let i = 0; i < text.length; i++) {
+        displayed += text[i];
+
+        setMessages(prev => {
+          const updated = [...prev];
+          // Atualizamos o texto da última mensagem adicionada ao array
+          updated[updated.length - 1].text = displayed;
+          return updated;
         });
+        await new Promise(r => setTimeout(r, 65)); // Renata: Digitação mais lenta e deliberada
       }
-    }, 1500);
+
+      await new Promise(r => setTimeout(r, 300));
+    }
+    await new Promise(r => setTimeout(r, 800)); // Delay extra antes de mostrar as escolhas
+    setIsTyping(false);
+  };
+
+  const handleChoice = async (choice) => {
+    let hackerText = choice.text;
+    if (hackerText.startsWith('root@nexus')) {
+      // Mantém comandos root@nexus como estão
+    } else if (hackerText.startsWith('> "')) {
+      hackerText = hackerText.substring(2); // Remove '> "'
+    }
+    if (hackerText.endsWith('"')) {
+      hackerText = hackerText.slice(0, -1); // Remove trailing '"'
+    }
+    setPlayerTargetText(hackerText);
+    setPendingChoice(choice);
+    setIsPlayerTyping(true);
+    setPlayerCurrentText("");
+  };
+
+  const handleEndGame = async () => {
+    const endText = pathToF3 
+      ? "...Vou descobrir quem você é. E quem está por trás disso."
+      : "Não vou ajudar. E vou reportar essa invasão.";
+    await sendRenataMessages([endText]);
+    setMissionComplete(true);
   };
 
   return (
     <div 
       ref={windowRef}
-      className={`aero-window renata-window ${isMinimized ? 'minimized' : ''}`} 
+      className={`terminal-window renata-window ${isMinimized ? 'minimized' : ''}`} 
       style={{ zIndex, left: `${position.x}px`, top: `${position.y}px` }} 
       onMouseDown={() => onFocus?.()}
     >
       <div className="title-bar" onMouseDown={handleMouseDown}>
+        <img src="/icons/skype_icon.png" alt="" className="window-icon" />
         <span className="title">Terminal de Investigação - Renata Sousa</span>
         <div className="controls">
-          <button className="minimize" onClick={onMinimize}>_</button>
+          <button className="minimize" onClick={onMinimize}>-</button>
           <button className="close" onClick={onClose}>×</button>
         </div>
       </div>
 
-      <div className="window-tabs">
+      <div className="window-tabs" onMouseDown={handleMouseDown}>
         <button className={activeTab === 'chat' ? 'active' : ''} onClick={() => setActiveTab('chat')}>CHAT</button>
         <button className={activeTab === 'files' ? 'active' : ''} onClick={() => setActiveTab('files')}>ARQUIVOS</button>
       </div>
@@ -267,82 +254,54 @@ const RenataWindow = ({ zIndex, onFocus, onClose, onMinimize, isMinimized }) => 
           <div className="chat-container">
             <div className="stats-panel">
               <div className="stat">
-                <span className="stat-label">Afinidade:</span>
-                <div className="bar-bg">
-                  <div className="bar-fill renata-affinity" style={{ width: `${affinity}%` }}></div>
-                </div>
-                <span className="stat-value">{affinity}%</span>
+                Afinidade: <div className="bar-bg"><div className="bar-fill" style={{ width: `${affinity}%` }}></div></div>
+                <span>{affinity}%</span>
               </div>
-              <div className="status-text">{getAffinityStatus()}</div>
-
               <div className="stat">
-                <span className="stat-label">Suspeita:</span>
-                <div className="bar-bg">
-                  <div className="bar-fill suspicion" style={{ width: `${suspicion}%` }}></div>
-                </div>
-                <span className="stat-value">{suspicion}%</span>
+                Suspeita: <div className="bar-bg"><div className="bar-fill suspicion" style={{ width: `${suspicion}%` }}></div></div>
+                <span>{suspicion}%</span>
               </div>
-              <div className="status-text suspicion-text">{getSuspicionStatus()}</div>
-
-              {pathToF3 && (
-                <div className="path-indicator path-f3">→ ROTA: FINAL 3</div>
-              )}
+              {pathToF3 && <div className="path-indicator path-f3">→ ROTA: FINAL 3</div>}
             </div>
 
             <div className="chat-window">
-              <div className="phase-label">{renataData.phases[currentPhaseIdx]?.label}</div>
-              
+              <div className="phase-label">{renataPhases[currentPhaseIdx]?.label}</div>
               {messages.map((m, i) => (
                 <div key={i} className={`msg msg-${m.who}`}>
-                  <div className="msg-label">{m.who === 'hacker' ? 'VOCÊ' : 'RENATA'}</div>
+                  <div className="msg-label">{m.who === 'hacker' ? '[OPERATOR@NEXUS]' : '[REMOTE_USER: RENATA]'}</div>
                   <div className="msg-bubble">{m.text}</div>
                 </div>
               ))}
-              
               {isTyping && (
                 <div className="msg msg-renata">
-                  <div className="msg-label">RENATA</div>
+                  <div className="msg-label">[REMOTE_USER: RENATA]</div>
                   <div className="msg-bubble"><span className="typing">digitando...</span></div>
                 </div>
               )}
-              
               {missionComplete && (
-                <div className={`final-card ${missionSuccess ? 'success' : 'failure'}`}>
-                  <div className="final-header">
-                    {missionSuccess ? '✓ MISSÃO CONCLUÍDA' : '✗ MISSÃO FALHOU'}
-                  </div>
-                  <div className="final-body">
-                    {missionSuccess ? (
-                      <>
-                        Renata concordou.<br/>
-                        Afinidade final: {affinity}%<br/>
-                        Suspeita final: {suspicion}%<br/>
-                        {pathToF3 && <><br/><b>ROTA F3 DESBLOQUEADA</b><br/></>}
-                        <br/>
-                        <i>Você conseguiu virar ela do seu lado.</i>
-                      </>
-                    ) : (
-                      <>
-                        Renata desconfiou.<br/>
-                        Afinidade final: {affinity}%<br/>
-                        Suspeita final: {suspicion}%<br/><br/>
-                        Ela vai te reportar para a segurança.<br/>
-                        <i>Operação comprometida.</i>
-                      </>
-                    )}
-                  </div>
+                <div className="msg msg-system" style={{ textAlign: 'center', marginTop: '10px' }}>
+                  <div className="msg-bubble" style={{ color: '#ff4444', borderColor: '#ff4444', display: 'inline-block', borderLeft: 'none' }}>[CONEXÃO ENCERRADA]</div>
                 </div>
               )}
-              
               <div ref={chatEndRef} />
             </div>
 
             {!missionComplete && (
               <div className="choices-area">
-                {!isTyping && renataData.phases[currentPhaseIdx]?.choices.map((c, i) => (
+                {isPlayerTyping ? (
+                  <div className="player-typing-line">
+                    <span>[OPERATOR@NEXUS]: {playerCurrentText}</span>
+                    <span className="cursor"></span>
+                    {playerCurrentText.length === 0 && (
+                      <div style={{fontSize: '10px', marginLeft: 'auto', opacity: 0.6}}>
+                        [PRESSIONE QUALQUER TECLA PARA DIGITAR]
+                      </div>
+                    )}
+                  </div>
+                ) : !isTyping && renataPhases[currentPhaseIdx]?.choices.map((c, i) => (
                   <button 
                     key={i} 
-                    className={`choice-btn ${c.danger ? 'danger' : ''} ${c.secret ? 'secret' : ''}`}
+                    className="choice-btn"
                     onClick={() => handleChoice(c)}
                   >
                     {c.text}
@@ -354,13 +313,8 @@ const RenataWindow = ({ zIndex, onFocus, onClose, onMinimize, isMinimized }) => 
         ) : (
           <div className="files-container">
             <div className="tree-panel">
-              {Object.entries(renataData.files || {}).map(([name, data]) => (
-                <FileTree 
-                  key={name} 
-                  name={name} 
-                  data={data} 
-                  onFileClick={(n, d) => setPreview({ name: n, ...d })}
-                />
+              {Object.entries(renataFiles).map(([name, data]) => (
+                <FileTree key={name} name={name} data={data} onFileClick={(n, d) => setPreview({ name: n, ...d })} />
               ))}
             </div>
             <div className={`preview-panel ${preview ? 'open' : ''}`}>
