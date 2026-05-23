@@ -112,7 +112,6 @@
 }
 
 .nexus-window .choice-btn::before {
-  content: '>> ';
   color: #ff3333;
   font-weight: bold;
   position: absolute;

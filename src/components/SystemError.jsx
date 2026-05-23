@@ -76,7 +76,7 @@ const SystemError = () => {
       <div className="window-body" style={{ gap: '15px' }}>
         <div style={{ display: 'flex', gap: '20px', alignItems: 'center', padding: '10px 0' }}>
           {/* Ícone clássico de erro do Windows */}
-          <img src="/icons/error_icon.png" alt="Error" style={{ width: '32px', height: '32px' }} />
+          <img src="/icons/error_icon.png" alt="Error" style={{ width: '40px', height: '40px' }} />
           <p style={{ color: '#000', fontSize: '12px', margin: 0, fontFamily: 'Segoe UI, sans-serif' }}>
             {systemError.message}
           </p>
