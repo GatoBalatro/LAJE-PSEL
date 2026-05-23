@@ -1,0 +1,273 @@
+{
+  "id": "nexus",
+  "name": "NEXUS",
+  "avatar": "/icons/nexus_icon.png",
+  "description": "Um hacker experiente que quer recrutar você para suas operações",
+  "phases": [
+    {
+      "id": 0,
+      "label": "CONEXÃO ESTABELECIDA",
+      "renata": [
+        "Ei, você. Sim, você que está acessando este sistema.",
+        "Meu nome é NEXUS. Sou o que você pode chamar de... um empreendedor digital.",
+        "Vi seu trabalho. Seus movimentos. Você tem potencial.",
+        "Quero fazer você uma proposta."
+      ],
+      "choices": [
+        {
+          "text": "> Quem é você? Como conseguiu meu acesso?",
+          "da": 0,
+          "ds": 5,
+          "eff": "curious",
+          "next": 1
+        },
+        {
+          "text": "> Saia daqui. Você não deveria estar aqui.",
+          "da": -10,
+          "ds": 0,
+          "eff": "hostile",
+          "next": 2
+        },
+        {
+          "text": "> ...",
+          "da": 5,
+          "ds": -5,
+          "eff": "silent",
+          "next": 1
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "label": "APRESENTAÇÃO",
+      "responses": {
+        "curious": [
+          "Excelente. Você faz perguntas. Isso é bom.",
+          "Consegui seu acesso porque deixei rastros para você seguir. Tudo controlado.",
+          "Trabalho para mim mesmo. Minha organização opera fora dos radares oficiais.",
+          "Nós detectamos algo importante: você tem acesso a sistemas que a maioria não tem."
+        ],
+        "hostile": [
+          "Hostil. Esperado. A maioria reage assim no começo.",
+          "Mas você não vai me derrotar fechando a conexão. Já deixei marcas no seu sistema."
+        ],
+        "silent": [
+          "O silêncio também é uma resposta. Você está processando.",
+          "Bom. Significa que você sabe quando ouvir."
+        ]
+      },
+      "choices": [
+        {
+          "text": "> O que você quer de mim?",
+          "da": 0,
+          "ds": 0,
+          "eff": "direct",
+          "next": 3
+        },
+        {
+          "text": "> Vou reportar isso para a segurança.",
+          "da": -15,
+          "ds": 10,
+          "danger": true,
+          "eff": "report",
+          "next": 4
+        },
+        {
+          "text": "> Continue. Estou curioso.",
+          "da": 10,
+          "ds": 10,
+          "eff": "interested",
+          "next": 3
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "label": "RECUSA INICIAL",
+      "responses": {
+        "hostile": [
+          "Como esperado. Mas lembre-se: você recebeu esta mensagem.",
+          "Já estou dentro. Já plantei sementes.",
+          "Quando mudar de ideia, você sabe como me encontrar.",
+          "E você VAI mudar de ideia. As pessoas sempre mudam."
+        ]
+      },
+      "choices": [
+        {
+          "text": "> Desconectar",
+          "da": -5,
+          "ds": -5,
+          "eff": "disconnect",
+          "next": null
+        },
+        {
+          "text": "> Espera. Antes de ir...",
+          "da": 5,
+          "ds": 0,
+          "eff": "hold",
+          "next": 3
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "label": "A PROPOSTA",
+      "responses": {
+        "direct": [
+          "Direto. Bom. Respeito isso.",
+          "Há operações em andamento. Corporações, agências, redes que precisam ser... acessadas.",
+          "Você tem as habilidades. Eu tenho a informação e os recursos.",
+          "Juntos, poderíamos fazer muito dano. E muito lucro."
+        ],
+        "interested": [
+          "Sabia que você tinha esse potencial.",
+          "Há operações em andamento que precisam de alguém com suas capacidades.",
+          "Corporações blindadas. Agências secretas. Redes que ninguém consegue penetrar.",
+          "Você e eu? Seríamos praticamente imparáveis."
+        ],
+        "hold": [
+          "Bom rapaz. Pensei que você pudesse ser sábio.",
+          "A proposta é simples: você ajuda em meus trabalhos. Eu dou recursos ilimitados.",
+          "Dados confidenciais. Acesso privilegiado. Dinheiro.",
+          "Tudo o que você poderia querer."
+        ]
+      },
+      "choices": [
+        {
+          "text": "> Isso é criminal. Não posso ajudar.",
+          "da": -20,
+          "ds": 0,
+          "danger": true,
+          "eff": "refuse",
+          "next": 5
+        },
+        {
+          "text": "> Parece interessante. Conte-me mais.",
+          "da": 20,
+          "ds": 15,
+          "secret": true,
+          "eff": "accept",
+          "next": 6
+        },
+        {
+          "text": "> Preciso de mais tempo para decidir.",
+          "da": 5,
+          "ds": 0,
+          "eff": "think",
+          "next": 7
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "label": "RECUSA",
+      "responses": {
+        "refuse": [
+          "Criminal. Uma palavra tão limitada.",
+          "O que é crime, hacker? Você já invadiu sistemas. Você já descobriu segredos.",
+          "Você já está dentro. Já está comprometido.",
+          "Mas tudo bem. Sua perda. Estarei aqui quando mudar de ideia."
+        ]
+      },
+      "choices": [
+        {
+          "text": "> Desconectar definitivamente",
+          "da": 0,
+          "ds": 0,
+          "eff": "disconnect",
+          "next": null
+        },
+        {
+          "text": "> ...Talvez você esteja certo.",
+          "da": 15,
+          "ds": 10,
+          "eff": "reconsider",
+          "next": 6
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "label": "TREINAMENTO",
+      "responses": {
+        "accept": [
+          "Sabia que você ia ver as coisas ao meu jeito.",
+          "Primeiro: você precisa de treinamento. Não posso usar alguém que comete erros.",
+          "Vou te ensinar as técnicas que uso. Os atalhos. Os perigos.",
+          "Preste atenção. Porque o que vou te mostrar pode salvar sua vida... ou acabar com ela."
+        ],
+        "reconsider": [
+          "Isso. Inteligência prevalecendo.",
+          "Vou te mostrar como realmente funciona. Como ganhar dinheiro. Como ter poder.",
+          "Mas preciso saber que você é sério. Que você pode ser treinado.",
+          "Vamos começar com o básico: investigação de sistemas."
+        ]
+      },
+      "choices": [
+        {
+          "text": "> Entendido. Estou pronto.",
+          "da": 10,
+          "ds": 5,
+          "eff": "ready",
+          "next": 8
+        },
+        {
+          "text": "> O que vamos fazer primeiro?",
+          "da": 0,
+          "ds": 0,
+          "eff": "ask",
+          "next": 8
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "label": "MISSÃO PRÁTICA",
+      "responses": {
+        "ready": [
+          "Excelente. Sua primeira tarefa é simples, mas crítica.",
+          "Vou dar a você acesso a um sistema alvo. Dentro dele, há informações valiosas.",
+          "Seu trabalho: entrar, encontrar o arquivo correto, e sair sem deixar rastros.",
+          "Faça isso, e vamos ver se você realmente tem o que precisa."
+        ],
+        "ask": [
+          "Direto. Bom.",
+          "Vou dar a você acesso a um sistema alvo. É uma corporação menor. Segurança média.",
+          "Dentro dele, há um arquivo específico que você precisa encontrar e extrair.",
+          "É uma prova de conceito. Se conseguir, vamos para operações maiores."
+        ]
+      },
+      "choices": [
+        {
+          "text": "> Pronto. Me dê as coordenadas.",
+          "da": 0,
+          "ds": 0,
+          "eff": "start",
+          "next": 9
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "label": "TUTORIAL ATIVO",
+      "responses": {
+        "start": [
+          "Ótimo. Vou abrir uma conexão remota para você.",
+          "Você vai entrar em um sistema de arquivos. Ele tem centenas de pastas.",
+          "Seu alvo é específico: procure por algo que pareça valioso ou secreto.",
+          "Encontre o arquivo, clique nele, e você terá completado sua primeira operação.",
+          "Vamos ver do que você é capaz."
+        ]
+      },
+      "choices": [
+        {
+          "text": "> Entendi. Iniciando exploração...",
+          "da": 0,
+          "ds": 0,
+          "eff": "explore",
+          "next": null
+        }
+      ]
+    }
+  ]
+}
