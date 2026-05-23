@@ -99,7 +99,7 @@ const Taskbar = ({ windows, onToggleMinimize }) => {
             onClick={() => onToggleMinimize(win.id)}
             title={win.name}
           >
-            <img src={win.npcData?.avatar || "/icons/skype_icon.png"} alt="icon" className="taskbar-icon" />
+            <img src="/icons/skype_icon.png" alt="Skype" className="taskbar-icon" />
             <div className="hover-glow"></div>
           </div>
         ))}
