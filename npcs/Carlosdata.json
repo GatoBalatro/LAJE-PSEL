@@ -120,19 +120,19 @@
       ],
       "choices": [
         {
-          "text": "> \"Encontrei seus arquivos, Carlos. A planilha v3. Os fornecedores que não existem.\"",
+          "text": "Encontrei seus arquivos, Carlos. A planilha v3. Os fornecedores que não existem.",
           "delta": 20,
           "next": 1,
           "effect": "pressure"
         },
         {
-          "text": "> \"Não precisa saber quem sou. Precisa saber que eu posso ajudar você.\"",
+          "text": "Não precisa saber quem sou. Precisa saber que eu posso ajudar você.",
           "delta": 10,
           "next": 1,
           "effect": "neutral"
         },
         {
-          "text": "> \"Você sabe o que acontece com contadores que desviam dinheiro de construtoras?\"",
+          "text": "Você sabe o que acontece com contadores que desviam dinheiro de construtoras?",
           "delta": -5,
           "next": 1,
           "effect": "hostile"
@@ -149,19 +149,19 @@
       },
       "choices": [
         {
-          "text": "> \"Eu vi o chat com 'R'. Dia 15, Carlos. Quanto tempo falta?\"",
+          "text": "Eu vi o chat com 'R'. Dia 15, Carlos. Quanto tempo falta?",
           "delta": 25,
           "next": 2,
           "effect": "empathy"
         },
         {
-          "text": "> \"Trabalho para pessoas que podem fazer essa dívida desaparecer.\"",
+          "text": "Trabalho para pessoas que podem fazer essa dívida desaparecer.",
           "delta": 15,
           "next": 2,
           "effect": "offer"
         },
         {
-          "text": "> \"Tenho cópias de tudo. Um clique e chega no seu chefe.\"",
+          "text": "Tenho cópias de tudo. Um clique e chega no seu chefe.",
           "delta": 5,
           "next": 2,
           "effect": "threat",
@@ -179,13 +179,13 @@
       },
       "choices": [
         {
-          "text": "> \"Preciso que você acesse o sistema de controle da subestação sul e deixe uma porta aberta. Uma vez. Ninguém vai saber que foi você.\"",
+          "text": "Preciso que você acesse o sistema de controle da subestação sul e deixe uma porta aberta. Uma vez. Ninguém vai saber que foi você.",
           "delta": 20,
           "next": 3,
           "effect": "ask"
         },
         {
-          "text": "> \"Preciso de um favor técnico. Nada de sangue. Você nem vai precisar saber o resultado.\"",
+          "text": "Preciso de um favor técnico. Nada de sangue. Você nem vai precisar saber o resultado.",
           "delta": 10,
           "next": 3,
           "effect": "vague"
@@ -201,13 +201,13 @@
       },
       "choices": [
         {
-          "text": "> \"Vai acontecer um apagão localizado. Ninguém morre. Sua dívida some.\"",
+          "text": "Vai acontecer um apagão localizado. Ninguém morre. Sua dívida some.",
           "delta": 30,
           "next": 4,
           "effect": "deal"
         },
         {
-          "text": "> \"Pensa na sua família, Carlos. No Rodrigo. No dia 15.\"",
+          "text": "Pensa na sua família, Carlos. No Rodrigo. No dia 15.",
           "delta": 20,
           "next": 4,
           "effect": "family"
@@ -223,7 +223,7 @@
       },
       "choices": [
         {
-          "text": "> \"Sua família fica fora. Você some do mapa depois. Novo começo.\"",
+          "text": "Sua família fica fora. Você some do mapa depois. Novo começo.",
           "delta": 999,
           "next": null,
           "effect": "yes"

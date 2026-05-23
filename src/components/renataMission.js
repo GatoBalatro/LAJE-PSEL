@@ -79,36 +79,36 @@ export const renataPhases = [
     label: 'FASE 1 — PRIMEIRO CONTATO',
     renata: ['[SYSTEM]: ALERTA DE ACESSO REMOTO NÃO AUTORIZADO', 'Quem acessou meu computador?', 'Tem 30 segundos pra explicar antes de eu chamar a polícia.'],
     choices: [
-      { text: 'root@nexus:~# inject --msg "Eu li seus arquivos..."', da: 5, ds: 5, next: 1, eff: 'expose' }, // Sem arquivo (Convencimento reduzida)
-      { text: 'root@nexus:~# send --target "Delta_Info"', da: 2, ds: 20, next: 1, eff: 'delta' }, // Sem arquivo
-      { text: 'root@nexus:~# run exploit.sh --vague', da: 0, ds: 10, next: 1, eff: 'vague' },
+      { text: 'Calma, Renata. Eu andei olhando seus arquivos e sei que você foi injustiçada.', da: 5, ds: 5, next: 1, eff: 'expose' }, 
+      { text: 'Eu sei sobre o esquema da Construtora Delta. Eles não querem que você descubra a verdade.', da: 2, ds: 20, next: 1, eff: 'delta' }, 
+      { text: 'Não importa quem eu sou agora, mas sim o que eu descobri sobre o que está acontecendo nessa cidade.', da: 0, ds: 10, next: 1, eff: 'vague' },
     ]
   },
   {
     label: 'FASE 2 — REAÇÃO',
     responses: {
       expose: 'Crime. Sim, foi. Mas isso não explica por que você invadiu meu computador. O que você quer provar, e pra quem?',
-      delta: '[pausa] Como você sabe sobre a Delta? Quem te mandou?',
+      delta: 'Como você sabe sobre a Delta? Quem te mandou?',
       vague: 'Que cidade? Isso é vago demais. Fala de forma clara ou vou encerrar esse chat.'
     },
     choices: [
       // Bloqueado até encontrar o arquivo 'emails_internos_2019.eml'
-      { text: '> "Tenho os e-mails entre João Faria e Paulo Melo. Agosto de 2019. Quer ler?"', da: 30, ds: 10, next: 2, eff: 'emails', requiredFile: 'emails_internos_2019.eml' }, 
-      { text: '> "Trabalho para pessoas que vão destruir o que a corrupção construiu aqui."', da: 5, ds: 30, next: 2, eff: 'reveal' },
-      { text: '> "A cidade vai pagar por ter rejeitado o projeto mais importante da década."', da: 8, ds: 15, next: 2, eff: 'ideology' },
+      { text: 'Tenho os e-mails entre João Faria e Paulo Melo. Agosto de 2019. Quer ler?', da: 30, ds: 10, next: 2, eff: 'emails', requiredFile: 'emails_internos_2019.eml' }, 
+      { text: 'Trabalho para pessoas que vão destruir o que a corrupção construiu aqui.', da: 5, ds: 30, next: 2, eff: 'reveal' },
+      { text: 'A cidade vai pagar por ter rejeitado o projeto mais importante da década.', da: 8, ds: 15, next: 2, eff: 'ideology' },
     ]
   },
   {
     label: 'FASE 3 — O PEDIDO',
     responses: {
-      emails: '...como você tem esses e-mails? Isso nunca foi público. [pausa] Ok. Estou ouvindo. Mas preciso que seja específico.',
+      emails: 'Como você tem esses e-mails...? Isso nunca foi público. Ok. Estou ouvindo. Mas preciso que seja específico.',
       reveal: 'Destruir. Essa palavra me preocupa. O que exatamente está sendo planejado?',
       ideology: 'Pagar como? Seja direto. Engenheira não trabalha com metáfora.'
     },
     choices: [
-      { text: '> "Preciso que você forneça as plantas técnicas da rede de distribuição. Para identificar os pontos críticos."', da: 5, ds: 25, next: 3, eff: 'ask_plants' },
-      { text: '> "Preciso que você confirme a localização das válvulas de pressão do sistema sul. Tecnicamente."', da: 20, ds: 20, next: 3, eff: 'ask_tech' },
-      { text: '> "A cidade vai sofrer um colapso de infraestrutura. Quero que você saiba que não foi acidente."', da: -10, ds: 40, next: 3, eff: 'honest' },
+      { text: 'Preciso que você forneça as plantas técnicas da rede de distribuição. Para identificar os pontos críticos.', da: 5, ds: 25, next: 3, eff: 'ask_plants' },
+      { text: 'Preciso que você confirme a localização das válvulas de pressão do sistema sul. Tecnicamente.', da: 20, ds: 20, next: 3, eff: 'ask_tech' },
+      { text: 'A cidade vai sofrer um colapso de infraestrutura. Quero que você saiba que não foi acidente.', da: -10, ds: 40, next: 3, eff: 'honest' },
     ]
   },
   {
@@ -116,13 +116,13 @@ export const renataPhases = [
     responses: {
       ask_plants: 'Plantas técnicas para "identificar pontos críticos". Isso é sabotagem. Você quer destruir infraestrutura.',
       ask_tech: 'Válvulas de pressão. Você não é pesquisador. Isso é sabotagem industrial. Quem contratou você?',
-      honest: '[30 segundos sem resposta] Quem financia isso? Não é ideologia. Há dinheiro nisso.'
+      honest: 'Quem financia isso? Não é ideologia. Há dinheiro nisso.'
     },
     choices: [
-      { text: '> "A cidade destruiu seu trabalho. Isso é justo."', da: -15, ds: 35, next: 4, eff: 'justify', danger: true },
+      { text: 'A cidade destruiu seu trabalho. Isso é justo.', da: -15, ds: 35, next: 4, eff: 'justify', danger: true },
       // Bloqueado até encontrar 'ata_reuniao_prefeitura_mar19.docx'
-      { text: '> "Você não deve nada a uma reunião que falsificou sua rejeição por inadequação orçamentária."', da: 35, ds: 10, next: 4, eff: 'betray', requiredFile: 'ata_reuniao_prefeitura_mar19.docx' }, 
-      { text: '> "Quem financia? Alguém que perdeu tanto quanto você com esse sistema."', da: 0, ds: 40, next: 4, eff: 'lie', secret: true },
+      { text: 'Você não deve nada a uma reunião que falsificou sua rejeição por inadequação orçamentária.', da: 35, ds: 10, next: 4, eff: 'betray', requiredFile: 'ata_reuniao_prefeitura_mar19.docx' }, 
+      { text: 'Quem financia? Alguém que perdeu tanto quanto você com esse sistema.', da: 0, ds: 40, next: 4, eff: 'lie', secret: true },
     ]
   },
   {
@@ -130,12 +130,12 @@ export const renataPhases = [
     responses: {
       justify: 'Justo. Você usou essa palavra pra descrever destruição de infraestrutura pública. Não. Eu recuso.',
       betray: 'Eu não devo nada. Mas também não vou ajudar a machucar gente que não tem culpa. Quem é o contratante?',
-      lie: '[longa pausa] Alguém com acesso a informações que não são públicas, que sabe sobre a Delta, que invadiu meu computador. Vou descobrir quem é você.'
+      lie: 'Alguém com acesso a informações que não são públicas, que sabe sobre a Delta, que invadiu meu computador. Vou descobrir quem é você.'
     },
     choices: [
-      { text: '> [Insistir] "É a única forma de mudar alguma coisa."', da: -20, ds: 10, next: 5, eff: 'insist', danger: true },
-      { text: '> [Recuar] "Tudo bem. Não vou te forçar."', da: 0, ds: 5, next: 5, eff: 'back' },
-      { text: '> [Deixar ela investigar] Encerrar o chat sem resposta.', da: 0, ds: 50, next: 5, eff: 'silent', secret: true },
+      { text: 'É a única forma de mudar alguma coisa.', da: -20, ds: 10, next: 5, eff: 'insist', danger: true },
+      { text: 'Tudo bem. Não vou te forçar.', da: 0, ds: 5, next: 5, eff: 'back' },
+      { text: 'Encerrar o chat sem resposta.', da: 0, ds: 50, next: 5, eff: 'silent', secret: true },
     ]
   }
 ];

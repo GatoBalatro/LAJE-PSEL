@@ -142,21 +142,21 @@
       ],
       "choices": [
         {
-          "text": "> \"Calma, Renata. Eu tenho informações sobre operações que você está investigando.\"",
+          "text": "Calma, Renata. Eu tenho informações sobre operações que você está investigando.",
           "da": 15,
           "ds": -10,
           "eff": "offer",
           "next": 1
         },
         {
-          "text": "> \"Sou um hacker. Encontrei evidências que você precisa ver.\"",
+          "text": "Sou um hacker. Encontrei evidências que você precisa ver.",
           "da": 5,
           "ds": 10,
           "eff": "direct",
           "next": 1
         },
         {
-          "text": "> \"Não importa quem sou. Você está desperdiçando tempo procurando nos lugares errados.\"",
+          "text": "Não importa quem sou. Você está desperdiçando tempo procurando nos lugares errados.",
           "da": -10,
           "ds": 25,
           "eff": "arrogant",
@@ -175,21 +175,21 @@
       },
       "choices": [
         {
-          "text": "> \"De dentro de sistemas que ninguém acessa legalmente. Mas estou do seu lado.\"",
+          "text": "De dentro de sistemas que ninguém acessa legalmente. Mas estou do seu lado.",
           "da": 20,
           "ds": 5,
           "eff": "ally",
           "next": 2
         },
         {
-          "text": "> \"Encontrei dados sobre corrupção em infraestrutura. Alguém está sabotando a cidade.\"",
+          "text": "Encontrei dados sobre corrupção em infraestrutura. Alguém está sabotando a cidade.",
           "da": 25,
           "ds": -5,
           "eff": "mission",
           "next": 2
         },
         {
-          "text": "> \"Tente rastrear então. Você é boa, mas não boa o suficiente.\"",
+          "text": "Tente rastrear então. Você é boa, mas não boa o suficiente.",
           "da": -15,
           "ds": 35,
           "eff": "challenge",
@@ -208,21 +208,21 @@
       },
       "choices": [
         {
-          "text": "> \"Preciso de seu acesso aos bancos de dados oficiais. Você confia em mim?\"",
+          "text": "Preciso de seu acesso aos bancos de dados oficiais. Você confia em mim?",
           "da": 10,
           "ds": 15,
           "eff": "trust",
           "next": 3
         },
         {
-          "text": "> \"Preciso que você não me bloqueie. Deixe-me trabalhar enquanto você investiga por fora.\"",
+          "text": "Preciso que você não me bloqueie. Deixe-me trabalhar enquanto você investiga por fora.",
           "da": 20,
           "ds": -10,
           "eff": "partnership",
           "next": 3
         },
         {
-          "text": "> \"Vou te dar as coordenadas de tudo. Depois você decide se confia em mim.\"",
+          "text": "Vou te dar as coordenadas de tudo. Depois você decide se confia em mim.",
           "da": 30,
           "ds": -15,
           "eff": "transparency",
@@ -240,21 +240,21 @@
       },
       "choices": [
         {
-          "text": "> \"Porque alguém precisa parar isso. Eu não tenho acesso legal como você tem.\"",
+          "text": "Porque alguém precisa parar isso. Eu não tenho acesso legal como você tem.",
           "da": 25,
           "ds": -20,
           "eff": "motivation",
           "next": 4
         },
         {
-          "text": "> \"Porque você é a melhor investigadora que conheço. E a única que pode fazer diferença.\"",
+          "text": "Porque você é a melhor investigadora que conheço. E a única que pode fazer diferença.",
           "da": 35,
           "ds": -10,
           "eff": "trust_me",
           "next": 4
         },
         {
-          "text": "> \"Porque ambos queremos a mesma coisa: descobrir a verdade.\"",
+          "text": "Porque ambos queremos a mesma coisa: descobrir a verdade.",
           "da": 20,
           "ds": 10,
           "eff": "truth",
@@ -272,21 +272,21 @@
       },
       "choices": [
         {
-          "text": "> \"As evidências. E sua intuição. Você vai sentir se eu estou mentindo.\"",
+          "text": "As evidências. E sua intuição. Você vai sentir se eu estou mentindo.",
           "da": 15,
           "ds": -25,
           "eff": "evidence",
           "next": 5
         },
         {
-          "text": "> \"Me dê uma segunda chance. Se em uma hora você sentir que é armadilha, bloqueia tudo.\"",
+          "text": "Me dê uma segunda chance. Se em uma hora você sentir que é armadilha, bloqueia tudo.",
           "da": 25,
           "ds": -5,
           "eff": "chance",
           "next": 5
         },
         {
-          "text": "> \"Não vou. Mas você vai descubrir sozinha e me procurar depois.\"",
+          "text": "Não vou. Mas você vai descubrir sozinha e me procurar depois.",
           "da": 10,
           "ds": 20,
           "eff": "confident",
@@ -304,21 +304,21 @@
       },
       "choices": [
         {
-          "text": "> \"Obrigado. Você não vai se arrepender.\"",
+          "text": "Obrigado. Você não vai se arrepender.",
           "da": 20,
           "ds": -15,
           "eff": "accept",
           "next": null
         },
         {
-          "text": "> \"Vou enviar os arquivos agora. Ativa a VPN quando receber.\"",
+          "text": "Vou enviar os arquivos agora. Ativa a VPN quando receber.",
           "da": 15,
           "ds": -10,
           "eff": "proceed",
           "next": null
         },
         {
-          "text": "> \"Perfeito. Enquanto você investiga, eu sigo minha pista. Nos falamos depois.\"",
+          "text": "Perfeito. Enquanto você investiga, eu sigo minha pista. Nos falamos depois.",
           "da": 10,
           "ds": -20,
           "eff": "separate",

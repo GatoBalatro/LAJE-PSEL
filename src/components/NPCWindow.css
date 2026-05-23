@@ -111,7 +111,9 @@
 }
 
 .system-error-popup .window-body {
-  padding-bottom: 0 !important;
+  padding-bottom: 8px !important;
+  margin-bottom: 2px !important;
+  gap: 10px !important;
 }
 
 /* Estilo para abas quando presentes (Renata/Carlos) */
