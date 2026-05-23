@@ -16,44 +16,42 @@ import CarlosWindow from "./components/CarlosWindow";
 import "./components/Desktop.css";
 
 // Dados dos NPCs
-const renataData = { 
-  id: 'renata', 
-  name: 'Renata Sousa', 
-  avatar: '/icons/skype_icon.png' 
-};
+const renataData = { id: 'renata', name: 'Renata Sousa', avatar: '/icons/skype_icon.png' };
+const nexusData = { id: 'nexus', name: 'NEXUS', avatar: '/icons/nexus_icon.png' };
+const carlosData = { id: 'carlos', name: 'Carlos Silva', avatar: '/icons/carlos_icon.png' };
 
-const nexusData = {
-  id: 'nexus',
-  name: 'NEXUS',
-  avatar: '/icons/nexus_icon.png'
-};
-
-const carlosData = {
-  id: 'carlos',
-  name: 'Carlos Silva',
-  avatar: '/icons/carlos_icon.png'
-};
-
-const DesktopEnvironment = ({ openWindows, handleMinimize, handleFocus, handleClose, handleOpenNPC }) => {
+const DesktopEnvironment = ({ 
+  openWindows, handleMinimize, handleFocus, handleClose, handleOpenNPC,
+  tutorialCompleted, carlosCompleted, onTutorialComplete, onCarlosComplete
+}) => {
   return (
     <div className="desktop">
       {/* Área de Ícones do Desktop */}
       <div className="desktop-icons-container" style={{ position: 'absolute', top: 20, left: 20, display: 'flex', flexDirection: 'column', gap: 10, zIndex: 10 }}>
+        {/* Tutorial sempre visível */}
         <DesktopIcon 
           name="NEXUS - Tutorial" 
           iconSrc={nexusData.avatar} 
           onClick={() => handleOpenNPC(nexusData)} 
         />
-        <DesktopIcon 
-          name="Carlos Silva" 
-          iconSrc={carlosData.avatar} 
-          onClick={() => handleOpenNPC(carlosData)} 
-        />
-        <DesktopIcon 
-          name="Renata Sousa" 
-          iconSrc={renataData.avatar} 
-          onClick={() => handleOpenNPC(renataData)} 
-        />
+        
+        {/* Libera Carlos após o tutorial */}
+        {tutorialCompleted && (
+          <DesktopIcon 
+            name="Carlos Silva" 
+            iconSrc={carlosData.avatar} 
+            onClick={() => handleOpenNPC(carlosData)} 
+          />
+        )}
+        
+        {/* Libera Renata após fase do Carlos */}
+        {carlosCompleted && (
+          <DesktopIcon 
+            name="Renata Sousa" 
+            iconSrc={renataData.avatar} 
+            onClick={() => handleOpenNPC(renataData)} 
+          />
+        )}
       </div>
 
       {/* Renderiza janelas */}
@@ -61,9 +59,7 @@ const DesktopEnvironment = ({ openWindows, handleMinimize, handleFocus, handleCl
         if (win.type === 'renata') {
           return (
             <RenataWindow 
-              key={win.id}
-              zIndex={win.zIndex}
-              isMinimized={win.isMinimized}
+              key={win.id} zIndex={win.zIndex} isMinimized={win.isMinimized}
               onMinimize={() => handleMinimize(win.id)}
               onFocus={() => handleFocus(win.id)}
               onClose={() => handleClose(win.id)}
@@ -72,32 +68,27 @@ const DesktopEnvironment = ({ openWindows, handleMinimize, handleFocus, handleCl
         } else if (win.type === 'nexus') {
           return (
             <NexusWindow 
-              key={win.id}
-              zIndex={win.zIndex}
-              isMinimized={win.isMinimized}
+              key={win.id} zIndex={win.zIndex} isMinimized={win.isMinimized}
               onMinimize={() => handleMinimize(win.id)}
               onFocus={() => handleFocus(win.id)}
               onClose={() => handleClose(win.id)}
+              onComplete={onTutorialComplete} // <-- Passa a função de conclusão
             />
           );
         } else if (win.type === 'carlos') {
           return (
             <CarlosWindow 
-              key={win.id}
-              zIndex={win.zIndex}
-              isMinimized={win.isMinimized}
+              key={win.id} zIndex={win.zIndex} isMinimized={win.isMinimized}
               onMinimize={() => handleMinimize(win.id)}
               onFocus={() => handleFocus(win.id)}
               onClose={() => handleClose(win.id)}
+              onComplete={onCarlosComplete} // <-- Passa a função de conclusão
             />
           );
         } else {
           return (
             <NPCWindow
-              key={win.id}
-              npcData={win.npcData}
-              zIndex={win.zIndex}
-              isMinimized={win.isMinimized}
+              key={win.id} npcData={win.npcData} zIndex={win.zIndex} isMinimized={win.isMinimized}
               onMinimize={() => handleMinimize(win.id)}
               onFocus={() => handleFocus(win.id)}
               onClose={() => handleClose(win.id)}
@@ -121,14 +112,12 @@ function AppContent() {
   const [openWindows, setOpenWindows] = useState([]);
   const [highestZIndex, setHighestZIndex] = useState(100);
 
-  // Não abre automaticamente nenhuma janela (permite que o usuário abra o tutorial opcionalmente)
-  useEffect(() => {
-    // Tutorial é opcional - usuário pode clicar no ícone do NEXUS
-  }, [isLoggedIn]);
+  // Estados de Progressão
+  const [tutorialCompleted, setTutorialCompleted] = useState(false);
+  const [carlosCompleted, setCarlosCompleted] = useState(false);
 
   const handleOpenNPC = (data) => {
     setOpenWindows((prev) => {
-      // Evita abrir a mesma janela duas vezes
       if (prev.some((w) => w.id === data.id)) {
         handleFocus(data.id);
         return prev;
@@ -138,7 +127,7 @@ function AppContent() {
       return [...prev, {
         id: data.id,
         npcData: data,
-        type: data.id === 'renata' ? 'renata' : data.id === 'nexus' ? 'nexus' : data.id === 'carlos' ? 'carlos' : 'standard',
+        type: data.id, // Simplificado, já que os IDs batem com os tipos (renata, nexus, carlos)
         zIndex: newZ,
         isMinimized: false,
         name: data.name
@@ -150,9 +139,7 @@ function AppContent() {
     const newZ = highestZIndex + 1;
     setHighestZIndex(newZ);
     setOpenWindows(prev => prev.map(w => {
-      if (w.id === id) {
-        return { ...w, zIndex: newZ, isMinimized: false };
-      }
+      if (w.id === id) return { ...w, zIndex: newZ, isMinimized: false };
       return w;
     }).sort((a, b) => a.zIndex - b.zIndex));
   };
@@ -169,6 +156,10 @@ function AppContent() {
       handleFocus={handleFocus}
       handleClose={handleClose}
       handleOpenNPC={handleOpenNPC}
+      tutorialCompleted={tutorialCompleted}
+      carlosCompleted={carlosCompleted}
+      onTutorialComplete={() => setTutorialCompleted(true)}
+      onCarlosComplete={() => setCarlosCompleted(true)}
     />
   );
 }
