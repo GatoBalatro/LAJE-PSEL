@@ -9,21 +9,54 @@ const NPCWindow = ({ npcData, onFinish, isMinimized, onMinimize, onFocus, onClos
   const { hasEvidence, startMinigame, showSystemError } = useContext(GameContext); // Usa o contexto
   const [isNudging, setIsNudging] = useState(false);
 
+  // Tenta encontrar o diálogo pelo ID (string como 'root') ou pelo índice numérico (das missões JS)
+  const dialog = npcData.dialogs[currentNode] || npcData.dialogs[currentNode === 'root' ? 0 : currentNode];
+
+  const [displayedText, setDisplayedText] = useState("");
+
+  // Efeito Typewriter para simular recebimento de dados/terminal
+  useEffect(() => {
+    if (!dialog) return;
+
+    // Busca o texto: tenta 'text', depois o nome do NPC (ex: 'renata'), ou a primeira resposta disponível
+    const nameKey = npcData.name.toLowerCase();
+    let rawText = dialog.text || dialog[nameKey];
+
+    // Caso especial para fases que usam o objeto 'responses'
+    if (!rawText && dialog.responses) {
+      rawText = Object.values(dialog.responses)[0]; 
+    }
+
+    // Se for um array de falas (comum nas novas missões), junta com quebras de linha
+    const textToType = Array.isArray(rawText) ? rawText.join('\n') : (rawText || "");
+
+    if (!textToType) return;
+    
+    let index = 0;
+    setDisplayedText("");
+    const timer = setInterval(() => {
+      setDisplayedText(textToType.substring(0, index + 1));
+      index++;
+      if (index >= textToType.length) clearInterval(timer);
+    }, 25); // Velocidade da transmissão
+
+    return () => clearInterval(timer);
+  }, [dialog?.text]);
+
   // Estado de posição para o arrasto
   const [position, setPosition] = useState({ x: 100, y: 100 });
   const [isDragging, setIsDragging] = useState(false);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
 
   const windowRef = useRef(null);
+  const nudgeAudio = useRef(new Audio('/sounds/terminal_alert.mp3'));
 
   // Efeito para vibrar a janela quando o NPC "manda" uma nova mensagem
   useEffect(() => {
     setIsNudging(true);
-    
-    // Opcional: Tocar o som de nudge se você tiver o arquivo
-    const audio = new Audio('/sounds/skype_nudge.mp3');
-    audio.volume = 0.5;
-    audio.play().catch(() => {});
+    nudgeAudio.current.volume = 0.5;
+    nudgeAudio.current.currentTime = 0; // Reinicia o áudio se ele já estiver tocando
+    nudgeAudio.current.play().catch(() => {});
 
     const timer = setTimeout(() => {
       setIsNudging(false);
@@ -38,15 +71,12 @@ const NPCWindow = ({ npcData, onFinish, isMinimized, onMinimize, onFocus, onClos
       
       let nextX = e.clientX - offset.x;
       let nextY = e.clientY - offset.y;
-
-      // Efeito Aero Snap (Magnetic Edges)
-      const SNAP_THRESHOLD = 30;
       const rect = windowRef.current.getBoundingClientRect();
+      const TASKBAR_HEIGHT = 45;
 
-      if (nextX < SNAP_THRESHOLD) nextX = 0;
-      if (nextY < SNAP_THRESHOLD) nextY = 0;
-      if (window.innerWidth - (nextX + rect.width) < SNAP_THRESHOLD) nextX = window.innerWidth - rect.width;
-      if (window.innerHeight - (nextY + rect.height) < SNAP_THRESHOLD) nextY = window.innerHeight - rect.height;
+      // Movimentação fluida com limites
+      nextX = Math.max(0, Math.min(nextX, window.innerWidth - rect.width));
+      nextY = Math.max(0, Math.min(nextY, window.innerHeight - rect.height - TASKBAR_HEIGHT));
 
       setPosition({ x: nextX, y: nextY });
     };
@@ -61,8 +91,6 @@ const NPCWindow = ({ npcData, onFinish, isMinimized, onMinimize, onFocus, onClos
       window.removeEventListener('mouseup', handleMouseUp);
     };
   }, [isDragging, offset]);
-
-  const dialog = npcData.dialogs[currentNode];
 
   const handleOptionClick = (option) => {
     // Verifica se a opção exige uma evidência específica e se o jogador a possui
@@ -110,7 +138,7 @@ const NPCWindow = ({ npcData, onFinish, isMinimized, onMinimize, onFocus, onClos
   return (
     <div 
       ref={windowRef}
-      className={`aero-window npc-dialog ${isMinimized ? 'minimized' : ''} ${isNudging ? 'nudge' : ''}`}
+      className={`terminal-window npc-dialog ${isMinimized ? 'minimized' : ''} ${isNudging ? 'nudge' : ''}`}
       style={{ 
         left: `${position.x}px`, 
         top: `${position.y}px`, 
@@ -119,26 +147,30 @@ const NPCWindow = ({ npcData, onFinish, isMinimized, onMinimize, onFocus, onClos
       onMouseDown={() => onFocus?.()}
     >
       <div className="title-bar" onMouseDown={handleMouseDown}>
-        <span className="title">Skype™ - {npcData.name}</span>
+        <img src="/icons/skype_icon.png" alt="" className="window-icon" />
+        <span className="title">REMOTE_ACCESS_V2.4 // TARGET: {npcData.name.toUpperCase()}</span>
         <div className="controls">
-          <button className="minimize" onClick={onMinimize}>_</button>
+          <button className="minimize" onClick={onMinimize}>-</button>
           <button className="close" onClick={onClose}>×</button>
         </div>
       </div>
       
       <div className="window-body">
         <div className="npc-info">
-          <img src={dialog.avatar || npcData.avatar} alt="Avatar" className="avatar-glass" />
-          <div className="dialog-bubble">
-            <p>{dialog.text}</p>
+          <img src={dialog.avatar || npcData.avatar} alt="Avatar" className="avatar-terminal" />
+          <div className="terminal-container">
+            <p className="terminal-text" style={{ whiteSpace: 'pre-wrap' }}>
+              <span className="prompt">{'>_'}</span> {displayedText}
+            </p>
           </div>
         </div>
 
         <div className="options-container">
-          {dialog.options?.map((option, index) => (
+          {/* Suporta tanto 'options' (JSON) quanto 'choices' (Arquivos de Missão) */}
+          {(dialog.options || dialog.choices)?.map((option, index) => (
             <button 
               key={index} 
-              className="win7-button"
+              className="terminal-button"
               onClick={() => handleOptionClick(option)}
             >
               {option.text}
@@ -147,7 +179,7 @@ const NPCWindow = ({ npcData, onFinish, isMinimized, onMinimize, onFocus, onClos
           
           {/* Botão extra para simular o hacking/minigame se necessário */}
           {currentNode === 'root' && !hasEvidence(npcData.minigameConfig.targetFile.name + npcData.minigameConfig.targetFile.extension) && (
-            <button className="win7-button highlight" onClick={handleStartMinigame}>
+            <button className="terminal-button highlight" onClick={handleStartMinigame}>
               [Hackear Sistema de Infraestrutura]
             </button>
           )}
@@ -155,7 +187,7 @@ const NPCWindow = ({ npcData, onFinish, isMinimized, onMinimize, onFocus, onClos
       </div>
       
       <div className="status-bar">
-        <span className="skype-status">● Online | Skype chamando...</span>
+        <span className="terminal-status">UPLINK: SECURE // ENCRYPTION: AES-256 // NO_LOGS</span>
       </div>
     </div>
   );

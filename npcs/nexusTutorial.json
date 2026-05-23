@@ -10,26 +10,26 @@
       "renata": [
         "Ei, você. Sim, você que está acessando este sistema.",
         "Meu nome é NEXUS. Sou o que você pode chamar de... um empreendedor digital.",
-        "Vi seu trabalho. Seus movimentos. Você tem potencial.",
-        "Quero fazer você uma proposta."
+        "Vi seu trabalho. Seus movimentos. Você têm potencial.",
+        "Quero fazer para você uma proposta."
       ],
       "choices": [
         {
-          "text": "> Quem é você? Como conseguiu meu acesso?",
+          "text": "Quem é você? Como conseguiu meu acesso?",
           "da": 0,
           "ds": 5,
           "eff": "curious",
           "next": 1
         },
         {
-          "text": "> Saia daqui. Você não deveria estar aqui.",
+          "text": "Saia daqui. Você não deveria estar aqui.",
           "da": -10,
           "ds": 0,
           "eff": "hostile",
           "next": 2
         },
         {
-          "text": "> ...",
+          "text": "...",
           "da": 5,
           "ds": -5,
           "eff": "silent",
@@ -58,22 +58,21 @@
       },
       "choices": [
         {
-          "text": "> O que você quer de mim?",
+          "text": "O que você quer de mim?",
           "da": 0,
           "ds": 0,
           "eff": "direct",
           "next": 3
         },
         {
-          "text": "> Vou reportar isso para a segurança.",
+          "text": "Vou reportar isso para a segurança.",
           "da": -15,
           "ds": 10,
-          "danger": true,
           "eff": "report",
           "next": 4
         },
         {
-          "text": "> Continue. Estou curioso.",
+          "text": "Continue. Estou curioso.",
           "da": 10,
           "ds": 10,
           "eff": "interested",
@@ -94,14 +93,14 @@
       },
       "choices": [
         {
-          "text": "> Desconectar",
+          "text": "Desconectar",
           "da": -5,
           "ds": -5,
           "eff": "disconnect",
           "next": null
         },
         {
-          "text": "> Espera. Antes de ir...",
+          "text": "Espera. Antes de ir...",
           "da": 5,
           "ds": 0,
           "eff": "hold",
@@ -126,7 +125,7 @@
           "Você e eu? Seríamos praticamente imparáveis."
         ],
         "hold": [
-          "Bom rapaz. Pensei que você pudesse ser sábio.",
+          "Bom. Pensei que você pudesse ser sábio.",
           "A proposta é simples: você ajuda em meus trabalhos. Eu dou recursos ilimitados.",
           "Dados confidenciais. Acesso privilegiado. Dinheiro.",
           "Tudo o que você poderia querer."
@@ -134,23 +133,21 @@
       },
       "choices": [
         {
-          "text": "> Isso é criminal. Não posso ajudar.",
+          "text": "Isso é criminal. Não posso ajudar.",
           "da": -20,
           "ds": 0,
-          "danger": true,
           "eff": "refuse",
           "next": 5
         },
         {
-          "text": "> Parece interessante. Conte-me mais.",
+          "text": "Parece interessante. Conte-me mais.",
           "da": 20,
           "ds": 15,
-          "secret": true,
           "eff": "accept",
           "next": 6
         },
         {
-          "text": "> Preciso de mais tempo para decidir.",
+          "text": "Preciso de mais tempo para decidir.",
           "da": 5,
           "ds": 0,
           "eff": "think",
@@ -171,14 +168,14 @@
       },
       "choices": [
         {
-          "text": "> Desconectar definitivamente",
+          "text": "Desconectar definitivamente",
           "da": 0,
           "ds": 0,
           "eff": "disconnect",
           "next": null
         },
         {
-          "text": "> ...Talvez você esteja certo.",
+          "text": "Talvez você esteja certo...",
           "da": 15,
           "ds": 10,
           "eff": "reconsider",
@@ -205,14 +202,14 @@
       },
       "choices": [
         {
-          "text": "> Entendido. Estou pronto.",
+          "text": "Entendido. Estou pronto.",
           "da": 10,
           "ds": 5,
           "eff": "ready",
           "next": 8
         },
         {
-          "text": "> O que vamos fazer primeiro?",
+          "text": "O que vamos fazer primeiro?",
           "da": 0,
           "ds": 0,
           "eff": "ask",
@@ -239,7 +236,7 @@
       },
       "choices": [
         {
-          "text": "> Pronto. Me dê as coordenadas.",
+          "text": "Pronto. Me dê as coordenadas.",
           "da": 0,
           "ds": 0,
           "eff": "start",
@@ -261,7 +258,7 @@
       },
       "choices": [
         {
-          "text": "> Entendi. Iniciando exploração...",
+          "text": "Entendi. Iniciando exploração...",
           "da": 0,
           "ds": 0,
           "eff": "explore",
