@@ -1,4 +1,4 @@
-import React, { createContext, useState, useCallback, useRef, useEffect } from 'react';
+import { createContext, useState, useCallback, useRef, useEffect } from 'react';
 
 export const GameContext = createContext();
 
@@ -32,7 +32,7 @@ export const GameProvider = ({ children }) => {
 
     const timer = setTimeout(() => {
       addLog("BEM-VINDO, OPERADOR. CONEXÃO CRIPTOGRAFADA ESTABELECIDA.");
-      addLog("OBJETIVO: COLETAR PROVAS CONTRA O ALVO_01.");
+      addLog("OBJETIVO: Chantagear Alvos de Alto perfil.");
     }, 1000);
     return () => clearTimeout(timer);
   }, [isLoggedIn]);
