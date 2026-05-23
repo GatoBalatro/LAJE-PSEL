@@ -93,8 +93,8 @@ export const carlosPhases = [
       vague: 'Não gosto disso. "Não precisa saber" é sinal de problema.'
     },
     choices: [
-      { text: '> Vai acontecer um apagão localizado. Ninguém morre. Sua dívida some.', da: 10, next: 4, eff: 'deal' },
-      { text: '> Pensa na sua família, Carlos. No rascunho da carta que encontrei para o Rodrigo.', da: 28, next: 4, eff: 'family', requiredFile: 'rascunho_carta.txt' },
+      { text: 'Vai acontecer um apagão localizado. Ninguém morre. Sua dívida some.', da: 10, next: 4, eff: 'deal' },
+      { text: 'Pensa na sua família, Carlos. No rascunho da carta que encontrei para o Rodrigo.', da: 28, next: 4, eff: 'family', requiredFile: 'rascunho_carta.txt' },
     ]
   },
   {
@@ -104,7 +104,7 @@ export const carlosPhases = [
       family: '[sem resposta por 40 segundos] Tá. O que precisa exatamente?'
     },
     choices: [
-      { text: '> Sua família fica fora. Você some do mapa depois. Novo começo.', da: 15, next: 5, eff: 'yes' },
+      { text: 'Sua família fica fora. Você some do mapa depois. Novo começo.', da: 15, next: 5, eff: 'yes' },
     ]
   }
 ];
