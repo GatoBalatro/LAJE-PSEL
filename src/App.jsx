@@ -1,7 +1,7 @@
+// App.jsx
 import { useState, useEffect, useContext } from "react";
 import { GameProvider, GameContext } from "./context/GameContext";
 
-// Componentes
 import Taskbar from "./components/Taskbar";
 import NPCWindow from "./components/NPCWindow";
 import InventoryWindow from "./components/InventoryWindow";
@@ -15,27 +15,24 @@ import NexusWindow from "./components/NexusWindow";
 import CarlosWindow from "./components/CarlosWindow";
 import "./components/Desktop.css";
 
-// Dados dos NPC
 const nexusData = { id: 'nexus', name: 'NEXUS', avatar: 'icons/nexus_icon.png' };
 const carlosData = { id: 'carlos', name: 'Carlos Silva', avatar: 'icons/carlos_icon.png' };
 const renataData = { id: 'renata', name: 'Renata Sousa', avatar: 'icons/renata_icon.png' };
 
 const DesktopEnvironment = ({ 
   openWindows, handleMinimize, handleFocus, handleClose, handleOpenNPC,
-  tutorialCompleted, carlosCompleted, onTutorialComplete, onCarlosComplete
+  tutorialCompleted, carlosCompleted, onTutorialComplete, onCarlosComplete, onRenataComplete,
+  nexusOpenedPostTutorial, setNexusOpenedPostTutorial
 }) => {
   return (
     <div className="desktop">
-      {/* Área de Ícones do Desktop */}
       <div className="desktop-icons-container" style={{ position: 'absolute', top: 20, left: 20, display: 'flex', flexDirection: 'column', gap: 10, zIndex: 10 }}>
-        {/* Tutorial sempre visível */}
         <DesktopIcon 
           name="NEXUS - Tutorial" 
           iconSrc={nexusData.avatar} 
           onClick={() => handleOpenNPC(nexusData)} 
         />
         
-        {/* Libera Carlos após o tutorial */}
         {tutorialCompleted && (
           <DesktopIcon 
             name="Carlos Silva" 
@@ -44,7 +41,6 @@ const DesktopEnvironment = ({
           />
         )}
         
-        {/* Libera Renata após fase do Carlos */}
         {carlosCompleted && (
           <DesktopIcon 
             name="Renata Sousa" 
@@ -54,15 +50,15 @@ const DesktopEnvironment = ({
         )}
       </div>
 
-      {/* Renderiza janelas */}
       {openWindows.map((win) => {
         if (win.type === 'renata') {
           return (
             <RenataWindow 
-              key={win.id} zIndex={win.zIndex} isMinimized={win.isMinimized}
+              key={win.key || win.id} zIndex={win.zIndex} isMinimized={win.isMinimized}
               onMinimize={() => handleMinimize(win.id)}
               onFocus={() => handleFocus(win.id)}
               onClose={() => handleClose(win.id)}
+              onComplete={onRenataComplete}
             />
           );
         } else if (win.type === 'nexus') {
@@ -72,17 +68,21 @@ const DesktopEnvironment = ({
               onMinimize={() => handleMinimize(win.id)}
               onFocus={() => handleFocus(win.id)}
               onClose={() => handleClose(win.id)}
-              onComplete={onTutorialComplete} // <-- Passa a função de conclusão
+              onComplete={onTutorialComplete}
+              tutorialCompleted={tutorialCompleted}
+              overrideMode={win.overrideMode}
+              nexusOpenedPostTutorial={nexusOpenedPostTutorial}
+              setNexusOpenedPostTutorial={setNexusOpenedPostTutorial}
             />
           );
         } else if (win.type === 'carlos') {
           return (
             <CarlosWindow 
-              key={win.id} zIndex={win.zIndex} isMinimized={win.isMinimized}
+              key={win.key || win.id} zIndex={win.zIndex} isMinimized={win.isMinimized}
               onMinimize={() => handleMinimize(win.id)}
               onFocus={() => handleFocus(win.id)}
               onClose={() => handleClose(win.id)}
-              onComplete={onCarlosComplete} // <-- Passa a função de conclusão
+              onComplete={onCarlosComplete}
             />
           );
         } else {
@@ -112,19 +112,18 @@ function AppContent() {
   const [openWindows, setOpenWindows] = useState([]);
   const [highestZIndex, setHighestZIndex] = useState(100);
 
-  // Estados de Progressão
   const [tutorialCompleted, setTutorialCompleted] = useState(false);
   const [carlosCompleted, setCarlosCompleted] = useState(false);
+  const [carlosStatus, setCarlosStatus] = useState(null);
+  const [nexusOpenedPostTutorial, setNexusOpenedPostTutorial] = useState(false);
 
-  // Inicializa a ambiência sonora na abertura do jogo
   useEffect(() => {
-    const bgMusic = new Audio('/sounds/background_ambient.mp3'); // Certifique-se que o arquivo existe
+    const bgMusic = new Audio('/sounds/background_ambient.mp3');
     bgMusic.loop = true;
     bgMusic.volume = 0.3;
 
     const handleInitialPlay = () => {
       bgMusic.play().catch(() => {});
-      // Remove o listener após o primeiro clique para não disparar novamente
       window.removeEventListener('mousedown', handleInitialPlay);
     };
 
@@ -156,23 +155,53 @@ function AppContent() {
     setOpenWindows((prev) => prev.filter((win) => win.id !== id));
   };
 
-  const handleOpenNPC = (data) => {
+  const handleOpenNPC = (data, overrideMode = null) => {
     setOpenWindows((prev) => {
-      if (prev.some((w) => w.id === data.id)) {
-        handleFocus(data.id);
-        return prev;
-      }
+      const windowExists = prev.some((w) => w.id === data.id);
       const newZ = highestZIndex + 1;
       setHighestZIndex(newZ);
+
+      if (windowExists) {
+        if (data.id === 'carlos' || data.id === 'renata') {
+          return prev.map((w) =>
+            w.id === data.id
+              ? { ...w, zIndex: newZ, isMinimized: false, key: `${data.id}-${Date.now()}` }
+              : w
+          );
+        }
+        return prev.map((w) => 
+          w.id === data.id 
+            ? { ...w, zIndex: newZ, isMinimized: false, overrideMode: overrideMode || w.overrideMode } 
+            : w
+        );
+      }
+
       return [...prev, {
         id: data.id,
         npcData: data,
-        type: data.id, // Simplificado, já que os IDs batem com os tipos (renata, nexus, carlos)
+        type: data.id,
         zIndex: newZ,
         isMinimized: false,
-        name: data.name
+        name: data.name,
+        overrideMode: overrideMode,
+        key: data.id === 'nexus' ? 'nexus-static' : `${data.id}-${Date.now()}`
       }];
     });
+  };
+
+  const onTutorialComplete = () => {
+    setTutorialCompleted(true);
+  };
+
+  const onCarlosComplete = (status) => {
+    setCarlosStatus(status);
+    setCarlosCompleted(true);
+    handleOpenNPC(nexusData, status === 'success' ? 'carlos_success' : 'carlos_failed');
+  };
+
+  const onRenataComplete = (status) => {
+    const finalMode = (status === 'success' && carlosStatus === 'success') ? 'both_success' : 'renata_failed';
+    handleOpenNPC(nexusData, finalMode);
   };
 
   return isLoggedIn ? (
@@ -184,8 +213,11 @@ function AppContent() {
       handleOpenNPC={handleOpenNPC}
       tutorialCompleted={tutorialCompleted}
       carlosCompleted={carlosCompleted}
-      onTutorialComplete={() => setTutorialCompleted(true)}
-      onCarlosComplete={() => setCarlosCompleted(true)}
+      onTutorialComplete={onTutorialComplete}
+      onCarlosComplete={onCarlosComplete}
+      onRenataComplete={onRenataComplete}
+      nexusOpenedPostTutorial={nexusOpenedPostTutorial}
+      setNexusOpenedPostTutorial={setNexusOpenedPostTutorial}
     />
   ) : (
     <LoginScreen />

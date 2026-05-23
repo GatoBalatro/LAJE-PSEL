@@ -79,7 +79,7 @@ export const renataPhases = [
     label: 'FASE 1 — PRIMEIRO CONTATO',
     renata: ['[SYSTEM]: ALERTA DE ACESSO REMOTO NÃO AUTORIZADO', 'Quem acessou meu computador?', 'Tem 30 segundos pra explicar antes de eu chamar a polícia.'],
     choices: [
-      { text: 'root@nexus:~# inject --msg "Eu li seus arquivos..."', da: 5, ds: 5, next: 1, eff: 'expose' }, // Sem arquivo (afinidade reduzida)
+      { text: 'root@nexus:~# inject --msg "Eu li seus arquivos..."', da: 5, ds: 5, next: 1, eff: 'expose' }, // Sem arquivo (Convencimento reduzida)
       { text: 'root@nexus:~# send --target "Delta_Info"', da: 2, ds: 20, next: 1, eff: 'delta' }, // Sem arquivo
       { text: 'root@nexus:~# run exploit.sh --vague', da: 0, ds: 10, next: 1, eff: 'vague' },
     ]
@@ -107,7 +107,7 @@ export const renataPhases = [
     },
     choices: [
       { text: '> "Preciso que você forneça as plantas técnicas da rede de distribuição. Para identificar os pontos críticos."', da: 5, ds: 25, next: 3, eff: 'ask_plants' },
-      { text: '> "Preciso que você confirme a localização das válvulas de pressão do sistema sul. Tecnicamente."', da: 10, ds: 20, next: 3, eff: 'ask_tech' },
+      { text: '> "Preciso que você confirme a localização das válvulas de pressão do sistema sul. Tecnicamente."', da: 20, ds: 20, next: 3, eff: 'ask_tech' },
       { text: '> "A cidade vai sofrer um colapso de infraestrutura. Quero que você saiba que não foi acidente."', da: -10, ds: 40, next: 3, eff: 'honest' },
     ]
   },
@@ -121,7 +121,7 @@ export const renataPhases = [
     choices: [
       { text: '> "A cidade destruiu seu trabalho. Isso é justo."', da: -15, ds: 35, next: 4, eff: 'justify', danger: true },
       // Bloqueado até encontrar 'ata_reuniao_prefeitura_mar19.docx'
-      { text: '> "Você não deve nada a uma reunião que falsificou sua rejeição por inadequação orçamentária."', da: 25, ds: 10, next: 4, eff: 'betray', requiredFile: 'ata_reuniao_prefeitura_mar19.docx' }, 
+      { text: '> "Você não deve nada a uma reunião que falsificou sua rejeição por inadequação orçamentária."', da: 35, ds: 10, next: 4, eff: 'betray', requiredFile: 'ata_reuniao_prefeitura_mar19.docx' }, 
       { text: '> "Quem financia? Alguém que perdeu tanto quanto você com esse sistema."', da: 0, ds: 40, next: 4, eff: 'lie', secret: true },
     ]
   },
