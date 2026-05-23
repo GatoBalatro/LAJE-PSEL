@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import { GameProvider, GameContext } from "./context/GameContext";
 
 // Componentes
@@ -12,6 +12,7 @@ import SystemError from "./components/SystemError";
 import BrokenGlassEffect from "./components/BrokenGlassEffect";
 import RenataWindow from "./components/RenataWindow";
 import NexusWindow from "./components/NexusWindow";
+import CarlosWindow from "./components/CarlosWindow";
 import "./components/Desktop.css";
 
 // Dados dos NPCs
@@ -27,6 +28,12 @@ const nexusData = {
   avatar: '/icons/nexus_icon.png'
 };
 
+const carlosData = {
+  id: 'carlos',
+  name: 'Carlos Silva',
+  avatar: '/icons/carlos_icon.png'
+};
+
 const DesktopEnvironment = ({ openWindows, handleMinimize, handleFocus, handleClose, handleOpenNPC }) => {
   return (
     <div className="desktop">
@@ -36,6 +43,11 @@ const DesktopEnvironment = ({ openWindows, handleMinimize, handleFocus, handleCl
           name="NEXUS - Tutorial" 
           iconSrc={nexusData.avatar} 
           onClick={() => handleOpenNPC(nexusData)} 
+        />
+        <DesktopIcon 
+          name="Carlos Silva" 
+          iconSrc={carlosData.avatar} 
+          onClick={() => handleOpenNPC(carlosData)} 
         />
         <DesktopIcon 
           name="Renata Sousa" 
@@ -60,6 +72,17 @@ const DesktopEnvironment = ({ openWindows, handleMinimize, handleFocus, handleCl
         } else if (win.type === 'nexus') {
           return (
             <NexusWindow 
+              key={win.id}
+              zIndex={win.zIndex}
+              isMinimized={win.isMinimized}
+              onMinimize={() => handleMinimize(win.id)}
+              onFocus={() => handleFocus(win.id)}
+              onClose={() => handleClose(win.id)}
+            />
+          );
+        } else if (win.type === 'carlos') {
+          return (
+            <CarlosWindow 
               key={win.id}
               zIndex={win.zIndex}
               isMinimized={win.isMinimized}
@@ -115,7 +138,7 @@ function AppContent() {
       return [...prev, {
         id: data.id,
         npcData: data,
-        type: data.id === 'renata' ? 'renata' : data.id === 'nexus' ? 'nexus' : 'standard',
+        type: data.id === 'renata' ? 'renata' : data.id === 'nexus' ? 'nexus' : data.id === 'carlos' ? 'carlos' : 'standard',
         zIndex: newZ,
         isMinimized: false,
         name: data.name
