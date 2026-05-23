@@ -47,7 +47,7 @@ const LoginScreen = () => {
         </div>
       )}
       <div className="login-footer">
-        <div className="win7-logo-text">Windows 7 Professional</div>
+        <div className="win7-logo-text">Bingus 27 Professional</div>
       </div>
     </div>
   );

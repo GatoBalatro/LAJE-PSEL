@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef, useContext } from 'react';
+import { useState, useEffect, useRef, useContext } from 'react';
 import { GameContext } from '../context/GameContext';
-import carlosData from './carlosData.json';
+import carlosData from '../../npcs/Carlosdata.json';
 import './CarlosWindow.css';
 
 // Componente para renderizar a árvore de arquivos
