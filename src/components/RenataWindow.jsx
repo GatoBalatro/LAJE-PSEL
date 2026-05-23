@@ -1,3 +1,4 @@
+// RenataWindow.jsx
 import { useState, useEffect, useRef } from 'react';
 import { renataFiles, renataPhases } from './renataMission';
 import './RenataWindow.css';
@@ -30,7 +31,7 @@ const FileTree = ({ data, name, onFileClick }) => {
   );
 };
 
-const RenataWindow = ({ zIndex, onFocus, onClose, onMinimize, isMinimized }) => {
+const RenataWindow = ({ zIndex, onFocus, onClose, onMinimize, isMinimized, onComplete }) => {
   const [activeTab, setActiveTab] = useState('chat');
   const [affinity, setAffinity] = useState(0);
   const [suspicion, setSuspicion] = useState(0);
@@ -43,9 +44,8 @@ const RenataWindow = ({ zIndex, onFocus, onClose, onMinimize, isMinimized }) => 
   const keyAudioRef = useRef(new Audio('/sounds/key_press.mp3'));
   const hasInitialized = useRef(false);
   const [missionComplete, setMissionComplete] = useState(false);
-  const [missionStatus, setMissionStatus] = useState('active'); // 'active' | 'success' | 'failed'
+  const [missionStatus, setMissionStatus] = useState('active');
 
-  // Novo estado para rastrear arquivos descobertos pelo jogador
   const [discoveredFiles, setDiscoveredFiles] = useState([]);
 
   const [isPlayerTyping, setIsPlayerTyping] = useState(false);
@@ -138,7 +138,7 @@ const RenataWindow = ({ zIndex, onFocus, onClose, onMinimize, isMinimized }) => 
 
     const nextPhase = renataPhases[choice.next];
     if (!nextPhase) {
-      handleEndGame();
+      await handleEndGame();
       return;
     }
 
@@ -195,21 +195,23 @@ const RenataWindow = ({ zIndex, onFocus, onClose, onMinimize, isMinimized }) => 
   };
 
   const handleEndGame = async () => {
-    // Validação da regra de negócio de afinidade mínima (65%)
     if (affinity < 65) {
       setMissionStatus('failed');
       await sendRenataMessages([
         "[SISTEMA]: CONEXÃO ENVIADA PARA DISPOSITIVO DE SEGURANÇA.", 
-        "[CONEXÃO CORROMPIDA]: Afinidade final insuficiente (" + affinity + "%). O alvo cortou a comunicação."
+        "[CONEXÃO CORROMPIDA]: Convencimento final insuficiente (" + affinity + "%). O alvo cortou a comunicação."
       ]);
+      setMissionComplete(true);
+      if (onComplete) onComplete('failed');
     } else {
       setMissionStatus('success');
       const endText = pathToF3 
         ? "...Vou descobrir quem você é. E quem está por trás disso."
         : "Não vou ajudar. E vou reportar essa invasão.";
       await sendRenataMessages([endText]);
+      setMissionComplete(true);
+      if (onComplete) onComplete('success');
     }
-    setMissionComplete(true);
   };
 
   return (
@@ -238,7 +240,7 @@ const RenataWindow = ({ zIndex, onFocus, onClose, onMinimize, isMinimized }) => 
           <div className="chat-container">
             <div className="stats-panel">
               <div className="stat">
-                Afinidade: <div className="bar-bg"><div className="bar-fill" style={{ width: `${affinity}%` }}></div></div>
+                Convencimento: <div className="bar-bg"><div className="bar-fill" style={{ width: `${affinity}%` }}></div></div>
                 <span>{affinity}%</span>
               </div>
               <div className="stat">
@@ -293,7 +295,6 @@ const RenataWindow = ({ zIndex, onFocus, onClose, onMinimize, isMinimized }) => 
                     )}
                   </div>
                 ) : !isTyping && renataPhases[currentPhaseIdx]?.choices
-                    // Validação de segurança: Filtra diálogos cujos arquivos não foram abertos
                     .filter(c => !c.requiredFile || discoveredFiles.includes(c.requiredFile))
                     .map((c, i) => (
                       <button 
@@ -317,7 +318,6 @@ const RenataWindow = ({ zIndex, onFocus, onClose, onMinimize, isMinimized }) => 
                   data={data} 
                   onFileClick={(n, d) => {
                     setPreview({ name: n, ...d });
-                    // Adiciona o arquivo ao array de descobertas do jogador se já não estiver contido
                     if (!discoveredFiles.includes(n)) {
                       setDiscoveredFiles(prev => [...prev, n]);
                     }

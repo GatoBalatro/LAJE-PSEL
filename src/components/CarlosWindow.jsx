@@ -1,6 +1,7 @@
+// carloswindow.jsx
 import { useState, useEffect, useRef } from 'react';
 import { carlosFiles, carlosPhases } from './carlosMission';
-import './CarlosWindow.css'; // Certifique-se de criar ou herdar os estilos do terminal
+import './CarlosWindow.css';
 
 const FileTree = ({ data, name, onFileClick }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -44,7 +45,6 @@ const CarlosWindow = ({ zIndex, onFocus, onClose, onMinimize, isMinimized, onCom
   const [missionComplete, setMissionComplete] = useState(false);
   const [missionStatus, setMissionStatus] = useState('active');
 
-  // Estado para rastrear arquivos visualizados
   const [discoveredFiles, setDiscoveredFiles] = useState([]);
 
   const [isPlayerTyping, setIsPlayerTyping] = useState(false);
@@ -135,7 +135,7 @@ const CarlosWindow = ({ zIndex, onFocus, onClose, onMinimize, isMinimized, onCom
     const nextPhase = carlosPhases[choice.next];
     
     if (!nextPhase) {
-      handleEndGame();
+      await handleEndGame();
       return;
     }
     const response = nextPhase.responses ? (nextPhase.responses[choice.eff] || Object.values(nextPhase.responses)[0]) : nextPhase.carlos;
@@ -191,19 +191,20 @@ const CarlosWindow = ({ zIndex, onFocus, onClose, onMinimize, isMinimized, onCom
   };
 
   const handleEndGame = async () => {
-    // Validação do limite mínimo de afinidade de 65%
     if (affinity < 65) {
       setMissionStatus('failed');
       await sendCarlosMessages([
         "[SISTEMA]: CONEXÃO PERDIDA.",
-        `[FALHA]: Afinidade insuficiente (${affinity}%). O alvo se recusou a cooperar e bloqueou o acesso.`
+        `[FALHA]: Convencimento insuficiente (${affinity}%). O alvo se recusou a cooperar e bloqueou o acesso.`
       ]);
+      setMissionComplete(true);
+      if (onComplete) onComplete('failed');
     } else {
       setMissionStatus('success');
       await sendCarlosMessages(["Está bem... Eu faço. Só garanta a segurança deles."]);
-      if (onComplete) onComplete(); 
+      setMissionComplete(true);
+      if (onComplete) onComplete('success'); 
     }
-    setMissionComplete(true);
   };
 
   return (
@@ -232,7 +233,7 @@ const CarlosWindow = ({ zIndex, onFocus, onClose, onMinimize, isMinimized, onCom
           <div className="chat-container">
             <div className="stats-panel">
               <div className="stat">
-                Afinidade: <div className="bar-bg"><div className="bar-fill" style={{ width: `${affinity}%` }}></div></div>
+                Convencimento: <div className="bar-bg"><div className="bar-fill" style={{ width: `${affinity}%` }}></div></div>
                 <span>{affinity}%</span>
               </div>
             </div>
@@ -277,7 +278,6 @@ const CarlosWindow = ({ zIndex, onFocus, onClose, onMinimize, isMinimized, onCom
                     <span className="cursor"></span>
                   </div>
                 ) : !isTyping && carlosPhases[currentPhaseIdx]?.choices
-                    // Filtro de pré-requisito do arquivo visualizado
                     .filter(c => !c.requiredFile || discoveredFiles.includes(c.requiredFile))
                     .map((c, i) => (
                       <button 

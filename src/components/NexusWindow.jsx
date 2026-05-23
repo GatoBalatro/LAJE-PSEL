@@ -1,8 +1,12 @@
+// NexusWindow.jsx
 import { useState, useEffect, useRef } from 'react';
 import nexusData from '../../npcs/nexusTutorial.json';
 import './NexusWindow.css';
 
-const NexusWindow = ({ zIndex, onFocus, onClose, onMinimize, isMinimized, onComplete }) => {
+const NexusWindow = ({ 
+  zIndex, onFocus, onClose, onMinimize, isMinimized, onComplete,
+  tutorialCompleted, overrideMode, nexusOpenedPostTutorial, setNexusOpenedPostTutorial 
+}) => {
   const [messages, setMessages] = useState([]);
   const [currentPhaseIdx, setCurrentPhaseIdx] = useState(0);
   const [isTyping, setIsTyping] = useState(false);
@@ -27,12 +31,11 @@ const NexusWindow = ({ zIndex, onFocus, onClose, onMinimize, isMinimized, onComp
       if (!isDragging || !windowRef.current) return;
       
       const rect = windowRef.current.getBoundingClientRect();
-      const TASKBAR_HEIGHT = 45; // Altura aproximada da barra de tarefas
+      const TASKBAR_HEIGHT = 45;
 
       let nextX = e.clientX - offset.x;
       let nextY = e.clientY - offset.y;
 
-      // Limitar bordas (Clamping)
       nextX = Math.max(0, Math.min(nextX, window.innerWidth - rect.width));
       nextY = Math.max(0, Math.min(nextY, window.innerHeight - rect.height - TASKBAR_HEIGHT));
 
@@ -49,7 +52,6 @@ const NexusWindow = ({ zIndex, onFocus, onClose, onMinimize, isMinimized, onComp
     };
   }, [isDragging, offset]);
 
-  // Timer para fechar a janela automaticamente após o fim da conversa
   useEffect(() => {
     if (missionComplete && onClose) {
       const timer = setTimeout(() => {
@@ -67,15 +69,48 @@ const NexusWindow = ({ zIndex, onFocus, onClose, onMinimize, isMinimized, onComp
   };
 
   useEffect(() => {
-    if (hasInitialized.current) return;
-    hasInitialized.current = true;
     typingAudioRef.current = new Audio('/sounds/typing.mp3');
     typingAudioRef.current.loop = true;
-    sendNexusMessages(nexusData.phases[0].renata);
+
+    if (overrideMode) {
+      setMessages([]);
+      setMissionComplete(false);
+      if (overrideMode === 'carlos_success') {
+        sendNexusMessages(["Parabéns pelo sucesso com o Carlos. Conseguimos os dados dele.", "Agora continue para a Renata."]);
+      } else if (overrideMode === 'carlos_failed') {
+        sendNexusMessages(["Você falhou na missão do Carlos. Ele bloqueou nossos acessos.", "Vá para a Renata imediatamente."]);
+      } else if (overrideMode === 'renata_failed') {
+        sendNexusMessages(["Um só não é o suficiente! Você falhou em convencer a Renata."]);
+      } else if (overrideMode === 'both_success') {
+        sendNexusMessages(["Bom trabalho! Ambas as fases foram concluídas com sucesso.", "Redirecionando..."]);
+        setTimeout(() => {
+          window.open('https://www.youtube.com/watch?v=oHg5SJYRHA0', '_blank');
+        }, 4000);
+      }
+      return;
+    }
+
+    if (tutorialCompleted) {
+      setMessages([]);
+      setMissionComplete(false);
+      if (!nexusOpenedPostTutorial) {
+        sendNexusMessages(["Pegue aqueles arquivos, temos um trabalho para fazer!"]);
+        if (setNexusOpenedPostTutorial) setNexusOpenedPostTutorial(true);
+      } else {
+        sendNexusMessages(["Você está perdendo tempo! Continue a missão."]);
+      }
+      return;
+    }
+
+    if (!hasInitialized.current) {
+      hasInitialized.current = true;
+      sendNexusMessages(nexusData.phases[0].renata);
+    }
+
     return () => {
       if (typingAudioRef.current) typingAudioRef.current.pause();
     };
-  }, []);
+  }, [overrideMode, tutorialCompleted]);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -85,7 +120,7 @@ const NexusWindow = ({ zIndex, onFocus, onClose, onMinimize, isMinimized, onComp
           const nextChar = playerTargetText[playerCurrentText.length];
           setPlayerCurrentText(prev => prev + nextChar);
           keyAudioRef.current.currentTime = 0;
-          keyAudioRef.current.volume = 0.25 + Math.random() * 0.3; // Volume variável entre 0.25 e 0.55
+          keyAudioRef.current.volume = 0.25 + Math.random() * 0.3;
           keyAudioRef.current.play().catch(() => {});
         } else {
           finishPlayerTyping();
@@ -126,36 +161,33 @@ const NexusWindow = ({ zIndex, onFocus, onClose, onMinimize, isMinimized, onComp
   const sendNexusMessages = async (texts) => {
     setIsTyping(true);
     for (const text of texts) {
-      
       let displayed = "";
       setMessages(prev => [...prev, { who: 'nexus', text: "", isTyping: true }]);
       
       for (let i = 0; i < text.length; i++) {
         displayed += text[i];
-
         setMessages(prev => {
           const updated = [...prev];
           updated[updated.length - 1].text = displayed;
           return updated;
         });
-        await new Promise(r => setTimeout(r, 20)); // Nexus: Resposta quase instantânea do sistema
+        await new Promise(r => setTimeout(r, 20));
       }
-
       await new Promise(r => setTimeout(r, 500));
     }
-    await new Promise(r => setTimeout(r, 800)); // Delay extra antes de mostrar as escolhas
+    await new Promise(r => setTimeout(r, 800));
     setIsTyping(false);
   };
 
   const handleChoice = (choice) => {
     let hackerText = choice.text;
     if (hackerText.startsWith('root@nexus')) {
-      // Mantém comandos root@nexus como estão
+      // Keep root instructions
     } else if (hackerText.startsWith('> "')) {
-      hackerText = hackerText.substring(2); // Remove '> "'
+      hackerText = hackerText.substring(2);
     }
     if (hackerText.endsWith('"')) {
-      hackerText = hackerText.slice(0, -1); // Remove trailing '"'
+      hackerText = hackerText.slice(0, -1);
     }
     setPlayerTargetText(hackerText);
     setPendingChoice(choice);
@@ -209,7 +241,7 @@ const NexusWindow = ({ zIndex, onFocus, onClose, onMinimize, isMinimized, onComp
             <div ref={chatEndRef} />
           </div>
 
-          {!missionComplete && (
+          {!missionComplete && !overrideMode && !tutorialCompleted && (
             <div className="choices-area">
               {isPlayerTyping ? (
                 <div className="player-typing-line">

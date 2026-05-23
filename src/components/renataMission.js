@@ -79,7 +79,7 @@ export const renataPhases = [
     label: 'FASE 1 — PRIMEIRO CONTATO',
     renata: ['[SYSTEM]: ALERTA DE ACESSO REMOTO NÃO AUTORIZADO', 'Quem acessou meu computador?', 'Tem 30 segundos pra explicar antes de eu chamar a polícia.'],
     choices: [
-      { text: 'root@nexus:~# inject --msg "Eu li seus arquivos..."', da: 5, ds: 5, next: 1, eff: 'expose' }, // Sem arquivo (afinidade reduzida)
+      { text: 'root@nexus:~# inject --msg "Eu li seus arquivos..."', da: 5, ds: 5, next: 1, eff: 'expose' }, // Sem arquivo (Convencimento reduzida)
       { text: 'root@nexus:~# send --target "Delta_Info"', da: 2, ds: 20, next: 1, eff: 'delta' }, // Sem arquivo
       { text: 'root@nexus:~# run exploit.sh --vague', da: 0, ds: 10, next: 1, eff: 'vague' },
     ]
