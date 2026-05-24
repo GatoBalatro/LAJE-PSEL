@@ -10,11 +10,10 @@
   border-bottom: 5px solid #888 !important; /* Borda inferior cinza como detalhe */
   border-radius: 10px !important; /* Arredondamento um pouco mais seco */
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); /* Removido o inset glow para evitar "bordas" fantasmas */
-  min-width: 450px;
   user-select: none;
   z-index: 100;
-  overflow: hidden; 
-  
+  overflow: hidden;
+
   transform-origin: center bottom; /* Faz a janela encolher em direção à base/barra */
 
   /* Animação suave estilo Windows 7 Aero */
@@ -24,6 +23,12 @@
     transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
     opacity 0.2s ease-in-out,
     visibility 0.25s;
+
+    width: 600px;              /* Define a largura fixa da janela */
+    height: 600px;             /* Define a altura fixa da janela */
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
 }
 
 .terminal-window.minimized {
@@ -95,6 +100,11 @@
   color: #ff4444 !important; /* Mensagens do NPC em vermelho */
   margin-bottom: 10px;
   text-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+   max-width: 100%;           /* Impede que o elemento ultrapasse o container pai */
+    overflow-wrap: break-word; /* Força a quebra de palavras longas */
+    word-break: break-word;    /* Compatibilidade adicional para quebra de texto */
+    white-space: pre-wrap;     /* Preserva quebras de linha do sistema sem estourar a largura */
+
 }
 
 /* Mensagens do Jogador (Hacker) em Verde */
@@ -106,7 +116,9 @@
 
 /* Estilos específicos para o Popup de Erro de Sistema */
 .system-error-popup {
-  min-width: 380px !important;
+  width: 420px !important;
+  height: auto !important;
+  min-height: unset !important;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5) !important;
 }
 
@@ -337,6 +349,14 @@
   font-family: 'Courier New', monospace;
   transition: all 0.2s;
   text-align: left;
+    white-space: normal;       /* Substitui o 'nowrap' e permite a quebra de linha automática */
+    height: auto;              /* Garante que a altura do botão se ajuste ao novo número de linhas */
+    text-overflow: unset;      /* Remove o truncamento por elipse */
+    overflow: visible;         /* Permite que o conteúdo expandido seja exibido */
+    overflow-wrap: break-word; /* Força a quebra de palavras longas se necessário */
+    display: block;            /* Garante comportamento de bloco para ocupação correta do container */
+    width: 100%;               /* Faz o botão ocupar toda a largura disponível da área de escolhas */
+
 }
 
 .choice-btn:hover, .terminal-button:hover {
@@ -367,6 +387,7 @@
   border-left: 2px solid #00ff00;
   background: rgba(0, 255, 0, 0.05);
   margin-top: 10px;
+  word-break: break-all;
 }
 
 .cursor {

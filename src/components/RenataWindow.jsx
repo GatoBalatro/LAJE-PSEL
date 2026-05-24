@@ -199,15 +199,15 @@ const RenataWindow = ({ zIndex, onFocus, onClose, onMinimize, isMinimized, onCom
       setMissionStatus('failed');
       await sendRenataMessages([
         "[SISTEMA]: CONEXÃO ENVIADA PARA DISPOSITIVO DE SEGURANÇA.", 
-        "[CONEXÃO CORROMPIDA]: Convencimento final insuficiente (" + affinity + "%). O alvo cortou a comunicação."
+        "[CONEXÃO CORROMPIDA]: Convencimento final insuficiente. O alvo cortou a comunicação."
       ]);
       setMissionComplete(true);
       if (onComplete) onComplete('failed');
     } else {
       setMissionStatus('success');
       const endText = pathToF3 
-        ? "...Vou descobrir quem você é. E quem está por trás disso."
-        : "Não vou ajudar. E vou reportar essa invasão.";
+        ? "Você me deu os fatos... Está bem. Se isso for expor o que a Delta e o Paulo Melo fizeram comigo, eu vou cooperar. Liberando as diretrizes de calibração das válvulas e as plantas originais agora. Faça o que for preciso."
+        : "Tudo bem, você me provou que eles armaram para me derrubar. Vou fazer o que você me pediu e transferir os arquivos técnicos do sistema de drenagem urbana. Só garanta que a verdade apareça.";
       await sendRenataMessages([endText]);
       setMissionComplete(true);
       if (onComplete) onComplete('success');

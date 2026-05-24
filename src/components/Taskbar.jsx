@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect, useContext } from 'react';
+import { useRef, useState, useEffect, useContext } from 'react';
 import './Taskbar.css';
 import { GameContext } from '../context/GameContext';
 import BalloonNotification from './BalloonNotification';
@@ -28,10 +28,8 @@ const Taskbar = ({ windows, onToggleMinimize }) => {
     return () => clearInterval(timer);
   }, []);
 
-  // Função para tocar o som de clique clássico
   const toggleStartMenu = () => {
     playSound('/sounds/win7_click.mp3', 0.4);
-    setIsStartMenuOpen(!isStartMenuOpen);
   };
 
   // Atualiza a posição do brilho seguindo o mouse
@@ -54,7 +52,12 @@ const Taskbar = ({ windows, onToggleMinimize }) => {
       onMouseMove={handleMouseMove}
     >
       <div className="start-button-win7" onClick={toggleStartMenu}>
-        <div className="logo-orb"></div>
+        <svg className="win7-logo-svg" viewBox="0 0 88 88" xmlns="http://www.w3.org/2000/svg">
+          <path fill="#F35325" d="M0 12.4l35.7-4.86.016 34.42-35.67.2z"/>
+          <path fill="#81BC06" d="M40.0 7.9L87.31 0v41.53l-47.32.376z"/>
+          <path fill="#05A6F0" d="M35.67 45.93l.028 34.45L.028 75.48.026 45.7z"/>
+          <path fill="#FFBA08" d="M87.33 47.8l-.011 41.34-47.32-6.68-.066-34.74z"/>
+        </svg>
       </div>
 
       {isStartMenuOpen && (

@@ -28,7 +28,7 @@ const DesktopEnvironment = ({
     <div className="desktop">
       <div className="desktop-icons-container" style={{ position: 'absolute', top: 20, left: 20, display: 'flex', flexDirection: 'column', gap: 10, zIndex: 10 }}>
         <DesktopIcon 
-          name="NEXUS - Tutorial" 
+          name="NEXUS - Iniciar" 
           iconSrc={nexusData.avatar} 
           onClick={() => handleOpenNPC(nexusData)} 
         />
