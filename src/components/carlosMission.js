@@ -10,7 +10,7 @@ export const carlosFiles = {
             children: {
               'controle_pessoal_v3.xlsx': {
                 type: 'file', kind: 'useful',
-                preview: `<span class="preview-tag tag-useful">ARQUIVO-CHAVE</span><br><br>Planilha com três abas:<br><b>Aba "Fornecedores"</b> — lista 11 empresas. Três delas não aparecem em nenhum CNPJ válido.<br><b>Aba "Pagamentos"</b> — R$ 12.400, R$ 8.750, R$ 21.000 transferidos em datas irregulares.<br><b>Aba "Saldo"</b> — coluna "devedor pessoal": R$ 278.400. Atualizado manualmente.<br><br><i>Não é da empresa. É dele.</i>`
+                preview: `<span class="preview-tag tag-useful">ARQUIVO-CHAVE</span><br><br>Planilha com três abas:<br><b>Aba "Fornecedores"</b>  lista 11 empresas. Três delas não aparecem em nenhum CNPJ válido.<br><b>Aba "Pagamentos"</b>  R$ 12.400, R$ 8.750, R$ 21.000 transferidos em datas irregulares.<br><b>Aba "Saldo"</b>  coluna "devedor pessoal": R$ 278.400. Atualizado manualmente.<br><br><i>Não é da empresa. É dele.</i>`
               },
               'controle_pessoal_v1.xlsx': {
                 type: 'file', kind: 'trap',
@@ -64,32 +64,32 @@ export const carlosPhases = [
   {
     label: 'FASE 2 — REAÇÃO AO CONFRONTO',
     responses: {
-      pressure: 'Isso não... de onde você tirou isso? Isso é particular.',
-      neutral: 'Ajudar como? Eu não preciso de ajuda de invasores.',
-      hostile: 'Eu não sei do que você está falando. Sai daqui.'
+      pressure: 'Isso não... de onde você tirou isso? Isso é particular. Você invadiu meu computador',
+      neutral: 'Ajudar como? Eu não preciso da ajuda de um desconhecido que me hackeou.',
+      hostile: 'Eu não sei do que você está falando. Não envia mais mensagens.'
     },
     choices: [
-      { text: ' Eu vi o chat com \'R\'. Dia 15, Carlos. Quanto tempo falta?', da: 30, next: 2, eff: 'empathy', requiredFile: 'chat_whatsapp_backup_parcial.txt' },
-      { text: ' Trabalho para pessoas que podem fazer essa dívida desaparecer.', da: 8, next: 2, eff: 'offer' },
-      { text: ' Tenho cópias de tudo. Um clique e chega no seu chefe.', da: 2, next: 2, eff: 'threat' }
+      { text: 'Eu vi o chat com \"R\". Dia 15, Carlos. Quanto tempo falta?', da: 30, next: 2, eff: 'empathy', requiredFile: 'chat_whatsapp_backup_parcial.txt' },
+      { text: 'Trabalho para pessoas que podem fazer essa dívida desaparecer.', da: 8, next: 2, eff: 'offer' },
+      { text: 'Tenho cópias de tudo. Um clique e chega no seu chefe.', da: 2, next: 2, eff: 'threat' }
     ]
   },
   {
     label: 'FASE 3 — A PROPOSTA',
     responses: {
       empathy: '...Como você sabe disso? O que você quer?',
-      offer: 'Que tipo de pessoas? Isso é golpe? Eu não tenho dinheiro.',
+      offer: 'Que tipo de pessoas? Isso é um golpe? Eu não tenho nenhum dinheiro.',
       threat: 'Tá bom. O que você quer? Fala logo.'
     },
     choices: [
-      { text: ' Preciso que você deixe uma porta aberta no sistema da subestação sul.', da: 15, next: 3, eff: 'ask' },
-      { text: ' Preciso de um favor técnico. Nada de sangue.', da: 5, next: 3, eff: 'vague' },
+      { text: 'Preciso que você acesse o sistema de controle da subestação sul e deixe uma porta aberta. Uma vez. Ninguém vai saber que foi você.', da: 15, next: 3, eff: 'ask' },
+      { text: 'Preciso de um favor técnico. Nada de sangue. Você nem vai precisar saber do que aconteceu.', da: 5, next: 3, eff: 'vague' },
     ]
   },
   {
     label: 'FASE 4 — HESITAÇÃO',
     responses: {
-      ask: 'Subestação sul... isso é infraestrutura da cidade. O que vai acontecer?',
+      ask: 'Subestação sul... isso é infraestrutura da cidade. Se eu fizer isso, o que vai acontecer?',
       vague: 'Não gosto disso. "Não precisa saber" é sinal de problema.'
     },
     choices: [
@@ -100,11 +100,18 @@ export const carlosPhases = [
   {
     label: 'FASE 5 — DECISÃO FINAL',
     responses: {
-      deal: '...Um apagão. Só isso? E minha família fica fora disso?',
-      family: '[sem resposta por 40 segundos] Tá. O que precisa exatamente?'
+      deal: 'Um apagão. Só isso? E minha família fica fora disso?',
+      family: 'Tá. O que precisa exatamente?'
     },
     choices: [
       { text: 'Sua família fica fora. Você some do mapa depois. Novo começo.', da: 15, next: 5, eff: 'yes' },
     ]
+  },
+  {
+    label: 'FASE 6 — ACORDO',
+    responses: {
+      yes: 'Ok. Me manda o que precisa. Mas se minha família se machucar, eu falo tudo.'
+    },
+    choices: []
   }
 ];

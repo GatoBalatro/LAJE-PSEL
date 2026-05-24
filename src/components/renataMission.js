@@ -1,3 +1,4 @@
+// renataMission.js
 export const renataFiles = {
   '/Projetos': {
     type: 'folder', children: {
@@ -77,65 +78,63 @@ export const renataFiles = {
 export const renataPhases = [
   {
     label: 'FASE 1 — PRIMEIRO CONTATO',
-    renata: ['[SYSTEM]: ALERTA DE ACESSO REMOTO NÃO AUTORIZADO', 'Quem acessou meu computador?', 'Tem 30 segundos pra explicar antes de eu chamar a polícia.'],
+    renata: ['[SYSTEM]: ALERTA DE ACESSO REMOTO NÃO AUTORIZADO', 'Quem está controlando meu terminal? Quem é você e o que você quer? Seja breve, vou acionar as autoridades imediatamente!'],
     choices: [
-      { text: 'Calma, Renata. Eu andei olhando seus arquivos e sei que você foi injustiçada.', da: 5, ds: 5, next: 1, eff: 'expose' }, 
-      { text: 'Eu sei sobre o esquema da Construtora Delta. Eles não querem que você descubra a verdade.', da: 2, ds: 20, next: 1, eff: 'delta' }, 
-      { text: 'Não importa quem eu sou agora, mas sim o que eu descobri sobre o que está acontecendo nessa cidade.', da: 0, ds: 10, next: 1, eff: 'vague' },
+      { text: 'Calma, Renata. Vasculhei sua rede e vi o que fizeram com seu projeto de Drenagem Urbana. Você foi injustiçada.', da: 15, ds: 5, next: 1, eff: 'expose' }, 
+      { text: 'Eu sei sobre o esquema da Construtora Delta e da Prefeitura. Eles sabotaram você para usar um projeto superfaturado.', da: 10, ds: 15, next: 1, eff: 'delta' }, 
+      { text: 'Não importa quem eu sou. O que importa é que o seu projeto v7_FINAL foi engolido pela corrupção dessa cidade.', da: 5, ds: 10, next: 1, eff: 'vague' },
     ]
   },
   {
     label: 'FASE 2 — REAÇÃO',
     responses: {
-      expose: 'Crime. Sim, foi. Mas isso não explica por que você invadiu meu computador. O que você quer provar, e pra quem?',
-      delta: 'Como você sabe sobre a Delta? Quem te mandou?',
-      vague: 'Que cidade? Isso é vago demais. Fala de forma clara ou vou encerrar esse chat.'
+      expose: 'Injustiçada é eufemismo. Fui demitida e caluniada. Mas isso não justifica invadir minha máquina. O que você quer com isso?',
+      delta: 'A Delta? Como você sabe disso? Esse contrato corre sob sigilo absoluto. Quem te mandou aqui?',
+      vague: 'Você fala como se soubesse de algo, mas entrar aqui sem autorização só te torna mais um criminoso. Seja direto.'
     },
     choices: [
-      // Bloqueado até encontrar o arquivo 'emails_internos_2019.eml'
-      { text: 'Tenho os e-mails entre João Faria e Paulo Melo. Agosto de 2019. Quer ler?', da: 30, ds: 10, next: 2, eff: 'emails', requiredFile: 'emails_internos_2019.eml' }, 
-      { text: 'Trabalho para pessoas que vão destruir o que a corrupção construiu aqui.', da: 5, ds: 30, next: 2, eff: 'reveal' },
-      { text: 'A cidade vai pagar por ter rejeitado o projeto mais importante da década.', da: 8, ds: 15, next: 2, eff: 'ideology' },
+      { text: 'Tenho os e-mails internos de agosto de 2019 entre João Faria e Paulo Melo. Eles armaram sua justa causa para favorecer a Delta.', da: 25, ds: 5, next: 2, eff: 'emails', requiredFile: 'emails_internos_2019.eml' }, 
+      { text: 'Estou investigando a rede técnica deles. Preciso de dados que só você possui para expor toda essa estrutura de fraudes.', da: 15, ds: 10, next: 2, eff: 'reveal' },
+      { text: 'Apenas mude a sua postura. Se ficarmos medindo forças, a Delta continuará lucrando com obras públicas perigosas.', da: 10, ds: 20, next: 2, eff: 'ideology' },
     ]
   },
   {
     label: 'FASE 3 — O PEDIDO',
     responses: {
-      emails: 'Como você tem esses e-mails...? Isso nunca foi público. Ok. Estou ouvindo. Mas preciso que seja específico.',
-      reveal: 'Destruir. Essa palavra me preocupa. O que exatamente está sendo planejado?',
-      ideology: 'Pagar como? Seja direto. Engenheira não trabalha com metáfora.'
+      emails: 'Eles... eles fabricaram a minha demissão? Eu sabia! Eu sempre soube! Meu Deus, eu preciso dessas provas. O que você quer em troca?',
+      reveal: 'Expor as fraudes? Se for verdade, eu quero que eles paguem. Mas engenharia lida com fatos. O que você precisa exatamente?',
+      ideology: 'A Delta ignora as normas de segurança básicas. Mas eu não posso simplesmente confiar em uma tela preta de terminal. O que você busca?'
     },
     choices: [
-      { text: 'Preciso que você forneça as plantas técnicas da rede de distribuição. Para identificar os pontos críticos.', da: 5, ds: 25, next: 3, eff: 'ask_plants' },
-      { text: 'Preciso que você confirme a localização das válvulas de pressão do sistema sul. Tecnicamente.', da: 20, ds: 20, next: 3, eff: 'ask_tech' },
-      { text: 'A cidade vai sofrer um colapso de infraestrutura. Quero que você saiba que não foi acidente.', da: -10, ds: 40, next: 3, eff: 'honest' },
+      { text: 'Preciso das plantas técnicas originais da rede de distribuição para apontar as falhas estruturais que a Delta escondeu.', da: 15, ds: 10, next: 3, eff: 'ask_plants' },
+      { text: 'Preciso das diretrizes de calibração das válvulas de pressão do sistema sul. Quero provar o risco de colapso que eles criaram.', da: 20, ds: 10, next: 3, eff: 'ask_tech' },
+      { text: 'Quero que você me ajude a assumir o controle dos servidores da subestação pública. Chegou a hora de desmantelar isso na marra.', da: -10, ds: 35, next: 3, eff: 'honest' },
     ]
   },
   {
     label: 'FASE 4 — CONFRONTO',
     responses: {
-      ask_plants: 'Plantas técnicas para "identificar pontos críticos". Isso é sabotagem. Você quer destruir infraestrutura.',
-      ask_tech: 'Válvulas de pressão. Você não é pesquisador. Isso é sabotagem industrial. Quem contratou você?',
-      honest: 'Quem financia isso? Não é ideologia. Há dinheiro nisso.'
+      ask_plants: 'As plantas originais... Elas provam que meu dimensionamento foi alterado para reduzir custos de material de forma criminosa.',
+      ask_tech: 'As pressões do sistema sul estão operando no limite para simular eficiência. Se você mexer nisso, pode causar um desastre urbano.',
+      honest: 'Assumir o controle? Isso é sabotagem! Você quer expor a corrupção ou quer causar um colapso e culpar o meu projeto de novo?'
     },
     choices: [
-      { text: 'A cidade destruiu seu trabalho. Isso é justo.', da: -15, ds: 35, next: 4, eff: 'justify', danger: true },
-      // Bloqueado até encontrar 'ata_reuniao_prefeitura_mar19.docx'
-      { text: 'Você não deve nada a uma reunião que falsificou sua rejeição por inadequação orçamentária.', da: 35, ds: 10, next: 4, eff: 'betray', requiredFile: 'ata_reuniao_prefeitura_mar19.docx' }, 
-      { text: 'Quem financia? Alguém que perdeu tanto quanto você com esse sistema.', da: 0, ds: 40, next: 4, eff: 'lie', secret: true },
+      { text: 'A prefeitura humilhou você em público. Retribuir a altura é o único jeito de obter justiça real.', da: -5, ds: 25, next: 4, eff: 'justify' },
+      { text: 'A ata oficial da reunião de março de 2019 mente explicitamente dizendo que seu plano era economicamente inviável. Você vai deixar passar?', da: 25, ds: 5, next: 4, eff: 'betray', requiredFile: 'ata_reuniao_prefeitura_mar19.docx' }, 
+      { text: 'Não quero ferir ninguém. Quero travar o sistema deles legalmente usando engenharia forense. Preciso da sua validação técnica.', da: 20, ds: 10, next: 4, eff: 'lie' },
     ]
   },
   {
     label: 'FASE 5 — DECISÃO',
     responses: {
-      justify: 'Justo. Você usou essa palavra pra descrever destruição de infraestrutura pública. Não. Eu recuso.',
-      betray: 'Eu não devo nada. Mas também não vou ajudar a machucar gente que não tem culpa. Quem é o contratante?',
-      lie: 'Alguém com acesso a informações que não são públicas, que sabe sobre a Delta, que invadiu meu computador. Vou descobrir quem é você.'
+      justify: 'Justiça não se faz implodindo uma cidade. Eu me recuso a ser cúmplice de um atentado contra infraestrutura pública.',
+      betray: 'Eles fraudaram os relatórios orçamentários... Usaram meu nome para carimbar uma mentira. Isso é imperdoável.',
+      lie: 'Se o objetivo é puramente técnico e forense para desmascarar as vistorias falsas da Delta... Eu posso considerar.'
     },
     choices: [
-      { text: 'É a única forma de mudar alguma coisa.', da: -20, ds: 10, next: 5, eff: 'insist', danger: true },
-      { text: 'Tudo bem. Não vou te forçar.', da: 0, ds: 5, next: 5, eff: 'back' },
-      { text: 'Encerrar o chat sem resposta.', da: 0, ds: 50, next: 5, eff: 'silent', secret: true },
+      { text: 'É a nossa única chance de expor a verdade e limpar o seu nome de uma vez por todas. Confie em mim.', da: 15, ds: 10, next: 5, eff: 'insist' },
+      { text: 'Tudo bem. Não vou te forçar a nada. A escolha de ver os culpados impunes é sua.', da: -10, ds: 5, next: 5, eff: 'back' },
+      { text: 'Cansei de tentar te convencer. Vou extrair o que preciso com ou sem a sua ajuda.', da: -30, ds: 45, next: 5, eff: 'silent' },
     ]
   }
 ];
