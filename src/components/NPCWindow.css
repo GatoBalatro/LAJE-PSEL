@@ -10,11 +10,12 @@
   border-bottom: 5px solid #888 !important; /* Borda inferior cinza como detalhe */
   border-radius: 10px !important; /* Arredondamento um pouco mais seco */
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); /* Removido o inset glow para evitar "bordas" fantasmas */
-  min-width: 450px;
+  width: 520px;
+  height: 500px;
   user-select: none;
   z-index: 100;
-  overflow: hidden; 
-  
+  overflow: hidden;
+
   transform-origin: center bottom; /* Faz a janela encolher em direção à base/barra */
 
   /* Animação suave estilo Windows 7 Aero */
@@ -117,7 +118,9 @@
 
 /* Estilos específicos para o Popup de Erro de Sistema */
 .system-error-popup {
-  min-width: 380px !important;
+  width: 420px !important;
+  height: auto !important;
+  min-height: unset !important;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5) !important;
 }
 
