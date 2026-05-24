@@ -63,7 +63,7 @@ export const renataFiles = {
   '/Downloads': {
     type: 'folder', children: {
       'ABNT_NBR_10844.pdf': { type: 'file', kind: 'useless', preview: `...` },
-      'artigo_corrupcao_obras_publicas.pdf': { type: 'file', kind: 'useful', preview: `...` },
+      'artigo_corrupcao_obras_publicas.pdf': { type: 'file', kind: 'useful', preview: `<span class="preview-tag tag-useful">ARQUIVO-CHAVE</span><br><br><b>Relatório de Auditoria Independente:</b><br><br>Documento técnico detalhando o superfaturamento em contratos de pavimentação urbana.<br><br>O texto estabelece uma conexão direta entre a <b>Empreiteira Delta</b> e o gabinete do Secretário de Obras da Prefeitura. Inclui planilhas que evidenciam o desvio de verbas repassadas via emendas parlamentares entre 2023 e 2025. <i>A documentação cita 'ajustes de cronograma' utilizados para justificar aditivos contratuais ilegais.</i>` },
       'pesquisa_construtora_delta.html': { type: 'file', kind: 'secret', preview: `...` }
     }
   },
@@ -132,9 +132,9 @@ export const renataPhases = [
       lie: 'Se o objetivo é puramente técnico e forense para desmascarar as vistorias falsas da Delta... Eu posso considerar.'
     },
     choices: [
-      { text: 'É a nossa única chance de expor a verdade e limpar o seu nome de uma vez por todas. Confie em mim.', da: 15, ds: 10, next: 5, eff: 'insist' },
-      { text: 'Tudo bem. Não vou te forçar a nada. A escolha de ver os culpados impunes é sua.', da: -10, ds: 5, next: 5, eff: 'back' },
-      { text: 'Cansei de tentar te convencer. Vou extrair o que preciso com ou sem a sua ajuda.', da: -30, ds: 45, next: 5, eff: 'silent' },
+      { text: 'É a nossa única chance de expor a verdade e limpar o seu nome de uma vez por todas. Confie em mim.', da: 15, ds: 10, next: 100, eff: 'insist' },
+      { text: 'Tudo bem. Não vou te forçar a nada. A escolha de ver os culpados impunes é sua.', da: -10, ds: 5, next: 100, eff: 'back' },
+      { text: 'Cansei de tentar te convencer. Vou extrair o que preciso com ou sem a sua ajuda.', da: -30, ds: 45, next: 100, eff: 'silent' },
     ]
   }
 ];

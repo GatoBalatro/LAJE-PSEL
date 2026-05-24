@@ -104,7 +104,7 @@ export const carlosPhases = [
       family: 'Tá. O que precisa exatamente?'
     },
     choices: [
-      { text: 'Sua família fica fora. Você some do mapa depois. Novo começo.', da: 15, next: 5, eff: 'yes' },
+      { text: 'Sua família fica fora. Você some do mapa depois. Novo começo.', da: 100, next: 5, eff: 'yes' },
     ]
   },
   {
@@ -112,6 +112,7 @@ export const carlosPhases = [
     responses: {
       yes: 'Ok. Me manda o que precisa. Mas se minha família se machucar, eu falo tudo.'
     },
-    choices: []
+    // Altere o "next" de 5 para 6 para disparar o handleEndGame
+    choices: [{ text: 'O Nexus te mandará as instruções.', da: 100, next: 6, eff: 'yes' }]
   }
 ];
