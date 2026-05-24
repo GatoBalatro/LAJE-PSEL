@@ -3,6 +3,8 @@
   --carlos-primary: #0078d7;
   --carlos-secondary: #ff6600;
   --carlos-accent: #ff0000;
+  width: 600px;
+  height: 580px;
 }
 
 .carlos-window .window-tabs {
@@ -245,15 +247,6 @@
   white-space: nowrap;
 }
 
-.carlos-window .choice-btn::before {
-  content: '> ';
-  color: #0099ff;
-  font-weight: bold;
-}
-
-.carlos-window .choice-btn {
-  padding-left: 18px;
-}
 
 .carlos-window .choice-btn:hover {
   background: linear-gradient(to right, #0078d7, #005a9e);
@@ -441,10 +434,6 @@
 @media (max-width: 768px) {
   .carlos-window {
     min-width: 280px;
-  }
-
-  .carlos-window .chat-window {
-    max-height: 250px;
   }
 
   .carlos-window .choices-area {

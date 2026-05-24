@@ -202,8 +202,7 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  min-height: 150px;
-  max-height: 320px;
+  min-height: 0;
   scroll-behavior: smooth;
 }
 
@@ -398,6 +397,11 @@
 }
 
 /* ===== RENATA WINDOW SPECIFIC ===== */
+.renata-window {
+  width: 580px;
+  height: 580px;
+}
+
 .renata-window .chat-window .phase-label {
   color: #0f0;
   border-color: rgba(0, 255, 0, 0.3);
@@ -538,10 +542,6 @@
 @media (max-width: 768px) {
   .aero-window {
     min-width: 280px;
-  }
-
-  .chat-window {
-    max-height: 250px;
   }
 
   .choices-area {

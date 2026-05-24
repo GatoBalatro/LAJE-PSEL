@@ -4,6 +4,8 @@
   --nexus-secondary: #ff6600;
   --nexus-dark: #1a0000;
   --nexus-accent: #ffaa00;
+  width: 520px;
+  height: 520px;
 }
 
 .nexus-window .window-tabs {
@@ -103,15 +105,16 @@
 }
 
 .nexus-window .choice-btn::before {
-  content: '>> ';
+  content: '>>';
   color: #ff3333;
   font-weight: bold;
-  position: absolute;
-  left: 6px;
+  margin-right: 8px;
 }
 
 .nexus-window .choice-btn {
-  padding-left: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 .nexus-window .choice-btn:hover {
